@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Algebra: Concepts & Connections — Remediation Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f1e8;
+  --paper: #fbf8f1;
+  --ink: #1a2332;
+  --ink-soft: #4a5568;
+  --rule: #d4cdb8;
+  --rule-soft: #e8e1cd;
+  --accent: #8b2c2c;
+  --navy: #1f3864;
+  --teal: #2f5f7f;
+  --below: #c84545;
+  --below-soft: #f4d4d4;
+  --app: #c89045;
+  --app-soft: #f9e6c4;
+  --met: #5d8a3d;
+  --met-soft: #d8e6c8;
+  --tier1: #b53030;
+  --tier2: #c97a2a;
+  --tier3: #d4a934;
+  --grpA: #c84545;
+  --grpA-soft: #f4d4d4;
+  --grpB: #c89045;
+  --grpB-soft: #f9e6c4;
+  --grpC: #5d8a3d;
+  --grpC-soft: #d8e6c8;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--bg); color: var(--ink); font-family: 'IBM Plex Sans', sans-serif; font-size: 14px; line-height: 1.5; }
+body {
+  background-image:
+    radial-gradient(circle at 20% 10%, rgba(139,44,44,0.04) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(31,56,100,0.04) 0%, transparent 50%);
+  min-height: 100vh;
+}
+.shell { max-width: 1400px; margin: 0 auto; padding: 32px 28px 80px; }
+
+.masthead { border-bottom: 3px double var(--ink); padding-bottom: 20px; margin-bottom: 24px; }
+.masthead .kicker { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+.masthead h1 { font-family: 'Fraunces', serif; font-weight: 900; font-size: 52px; line-height: 1.0; letter-spacing: -0.02em; font-variation-settings: "opsz" 144, "SOFT" 50; margin-bottom: 12px; }
+.masthead h1 em { font-style: italic; font-weight: 400; color: var(--accent); }
+.masthead .meta { font-size: 12px; color: var(--ink-soft); display: flex; gap: 18px; flex-wrap: wrap; border-top: 1px solid var(--rule); padding-top: 12px; }
+.masthead .meta span { display: flex; align-items: center; gap: 6px; }
+.masthead .meta b { font-weight: 600; color: var(--ink); }
+
+nav.tabs { display: flex; gap: 0; border-bottom: 2px solid var(--ink); margin-bottom: 32px; flex-wrap: wrap; position: sticky; top: 0; background: var(--bg); z-index: 10; padding-top: 8px; }
+nav.tabs button { background: transparent; border: none; border-bottom: 3px solid transparent; font-family: 'IBM Plex Sans', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; padding: 14px 18px; cursor: pointer; color: var(--ink-soft); margin-bottom: -2px; transition: all 0.2s; }
+nav.tabs button:hover { color: var(--ink); }
+nav.tabs button.active { color: var(--ink); border-bottom-color: var(--accent); }
+.panel { display: none; }
+.panel.active { display: block; animation: fadeIn 0.3s; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+h2 { font-family: 'Fraunces', serif; font-weight: 600; font-size: 28px; letter-spacing: -0.01em; margin-bottom: 6px; }
+h3 { font-family: 'Fraunces', serif; font-weight: 500; font-size: 20px; margin: 24px 0 12px; }
+.section-sub { font-size: 13px; color: var(--ink-soft); font-style: italic; margin-bottom: 20px; }
+
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 32px; }
+.tile { background: var(--paper); border: 1px solid var(--rule); padding: 16px 18px; position: relative; overflow: hidden; }
+.tile::before { content: ''; position: absolute; top:0; left:0; width: 3px; height: 100%; background: var(--accent); }
+.tile.navy::before { background: var(--navy); }
+.tile.met::before { background: var(--met); }
+.tile.app::before { background: var(--app); }
+.tile .label { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 8px; }
+.tile .value { font-family: 'Fraunces', serif; font-weight: 700; font-size: 36px; line-height: 1; font-variation-settings: "opsz" 144; }
+.tile .sub { font-size: 11px; color: var(--ink-soft); margin-top: 4px; }
+
+.findings { border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 20px 0; margin: 32px 0; }
+.finding { display: grid; grid-template-columns: 56px 1fr; gap: 18px; padding: 12px 0; border-bottom: 1px dotted var(--rule-soft); }
+.finding:last-child { border-bottom: none; }
+.finding .num { font-family: 'Fraunces', serif; font-weight: 900; font-size: 36px; font-style: italic; color: var(--accent); line-height: 1; }
+.finding .text { padding-top: 6px; font-size: 14px; }
+
+.table-wrap { background: var(--paper); border: 1px solid var(--rule); overflow-x: auto; margin-bottom: 24px; }
+table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+thead th { background: var(--ink); color: var(--paper); font-weight: 500; padding: 10px 12px; text-align: left; font-family: 'IBM Plex Sans', sans-serif; font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; border-bottom: 1px solid var(--ink); white-space: nowrap; }
+thead th.center { text-align: center; }
+tbody td { padding: 9px 12px; border-bottom: 1px solid var(--rule-soft); vertical-align: middle; }
+tbody td.center { text-align: center; }
+tbody tr:hover { background: rgba(31,56,100,0.04); }
+tbody tr:last-child td { border-bottom: none; }
+.cell-status { text-align: center; font-size: 11px; font-weight: 500; padding: 6px 8px; white-space: nowrap; }
+.cell-status.below { background: var(--below-soft); color: var(--below); }
+.cell-status.app { background: var(--app-soft); color: #8a5d20; }
+.cell-status.met { background: var(--met-soft); color: var(--met); }
+.cell-status.none { color: var(--ink-soft); }
+.student-name { font-weight: 600; }
+.gcs-pill { display: inline-block; font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 12px; padding: 3px 9px; border-radius: 2px; background: var(--below); color: var(--paper); }
+
+.group-pill { display: inline-block; font-family: 'IBM Plex Sans', sans-serif; font-weight: 700; font-size: 11px; padding: 4px 10px; color: var(--paper); letter-spacing: 0.05em; }
+.group-pill.A { background: var(--grpA); }
+.group-pill.B { background: var(--grpB); }
+.group-pill.C { background: var(--grpC); }
+
+.bar-row { display: grid; grid-template-columns: 280px 1fr 100px; gap: 16px; align-items: center; padding: 10px 0; border-bottom: 1px dotted var(--rule-soft); font-size: 12.5px; }
+.bar-row:last-child { border-bottom: none; }
+.bar-row .name { font-weight: 500; }
+.bar-row .name .std { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ink-soft); margin-left: 6px; }
+.bar { display: flex; height: 26px; background: var(--rule-soft); }
+.bar > div { display: flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600; color: var(--paper); transition: all 0.3s; }
+.bar .seg-below { background: var(--below); }
+.bar .seg-app { background: var(--app); }
+.bar .seg-met { background: var(--met); }
+.bar-row .pct { text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--below); font-weight: 600; }
+
+.tier { display: inline-block; padding: 3px 8px; font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--paper); }
+.tier.t1 { background: var(--tier1); }
+.tier.t2 { background: var(--tier2); }
+.tier.t3 { background: var(--tier3); color: var(--ink); }
+
+/* Groups page */
+.group-card { background: var(--paper); border: 1px solid var(--rule); margin-bottom: 24px; page-break-inside: avoid; }
+.group-card .header { padding: 18px 22px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; color: var(--paper); }
+.group-card.A .header { background: var(--grpA); }
+.group-card.B .header { background: var(--grpB); }
+.group-card.C .header { background: var(--grpC); }
+.group-card .header .title { font-family: 'Fraunces', serif; font-weight: 600; font-size: 22px; }
+.group-card .header .label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.85; }
+.group-card .roster { padding: 0; }
+.group-card .roster table { font-size: 12px; }
+.group-card .roster th { background: var(--teal); }
+.group-notes { padding: 16px 22px; border-top: 1px solid var(--rule); display: grid; grid-template-columns: 130px 1fr; gap: 4px 18px; }
+.group-notes dt { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); padding-top: 6px; }
+.group-notes dd { font-size: 12.5px; padding: 6px 0; border-bottom: 1px dotted var(--rule-soft); }
+.group-notes dd:last-child { border-bottom: none; }
+
+.rotation-table { background: var(--paper); border: 1px solid var(--rule); margin-top: 16px; }
+.rotation-table table { border-collapse: collapse; width: 100%; }
+.rotation-table td { padding: 12px; vertical-align: top; font-size: 12px; border: 1px solid var(--rule-soft); }
+.rotation-table td.time { font-family: 'JetBrains Mono', monospace; font-weight: 600; background: var(--rule-soft); text-align: center; white-space: nowrap; width: 90px; }
+.rotation-table td.whole { background: var(--ink); color: var(--paper); text-align: center; font-weight: 600; }
+.rotation-table td.colA { background: var(--grpA-soft); }
+.rotation-table td.colB { background: var(--grpB-soft); }
+.rotation-table td.colC { background: var(--grpC-soft); }
+.rotation-table thead th { background: var(--ink); color: var(--paper); }
+.rotation-table thead th.h-A { background: var(--grpA); }
+.rotation-table thead th.h-B { background: var(--grpB); }
+.rotation-table thead th.h-C { background: var(--grpC); }
+
+.week { background: var(--paper); border: 1px solid var(--rule); margin-bottom: 28px; }
+.week-head { background: var(--ink); color: var(--paper); padding: 16px 22px; display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: baseline; }
+.week-head .num { font-family: 'Fraunces', serif; font-weight: 900; font-style: italic; font-size: 36px; color: var(--paper); line-height: 1; }
+.week-head .theme { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 500; }
+.week-head .label { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(251,248,241,0.6); margin-bottom: 4px; }
+.week .rationale { padding: 14px 22px; background: rgba(139,44,44,0.04); border-bottom: 1px solid var(--rule); font-size: 13px; font-style: italic; color: var(--ink-soft); }
+.week .rationale b { color: var(--accent); font-style: normal; font-weight: 600; }
+.days { display: grid; grid-template-columns: repeat(5, 1fr); }
+.day { padding: 16px 16px 20px; border-right: 1px solid var(--rule-soft); font-size: 12px; }
+.day:last-child { border-right: none; }
+.day .daylabel { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--rule); }
+.day .daylabel .d { font-family: 'Fraunces', serif; font-weight: 700; font-size: 14px; }
+.day .daylabel .std { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; background: var(--ink); color: var(--paper); padding: 3px 6px; }
+.day .target { font-style: italic; color: var(--ink); margin-bottom: 10px; font-size: 12px; line-height: 1.4; }
+.day .meta-block { font-size: 11px; margin-top: 8px; }
+.day .meta-block .key { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); display: block; margin-bottom: 3px; }
+
+.profile { background: var(--paper); border: 1px solid var(--rule); margin-bottom: 20px; page-break-inside: avoid; }
+.profile-head { background: var(--navy); color: var(--paper); padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+.profile-head .name { font-family: 'Fraunces', serif; font-weight: 600; font-size: 19px; display: flex; align-items: center; gap: 12px; }
+.profile-head .stats { display: flex; gap: 20px; font-size: 11px; }
+.profile-head .stats div .v { font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 14px; display: block; }
+.profile-head .stats div .l { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.7; }
+.profile-body table { font-size: 11.5px; }
+
+.controls { display: flex; gap: 12px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; font-size: 12px; }
+.controls input, .controls select { font-family: 'IBM Plex Sans', sans-serif; font-size: 12px; padding: 7px 10px; border: 1px solid var(--rule); background: var(--paper); }
+
+.endmark { text-align: center; margin: 60px 0 0; font-family: 'Fraunces', serif; font-style: italic; color: var(--ink-soft); font-size: 13px; }
+.endmark::before, .endmark::after { content: '\2022'; margin: 0 12px; color: var(--accent); }
+
+
+.open-link { display: inline-flex; align-items: center; gap: 6px; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; padding: 6px 12px; background: var(--navy); color: var(--paper) !important; text-decoration: none; transition: all 0.15s; }
+.open-link:hover { background: var(--accent); transform: translateY(-1px); }
+.open-link::after { content: "\2197"; font-size: 13px; margin-left: 2px; }
+.day-link { display: block; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--rule); }
+.materials-table { width: 100%; }
+.materials-table td { padding: 12px 14px; vertical-align: middle; }
+.materials-table .type-pill { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; padding: 3px 7px; background: var(--teal); color: var(--paper); display: inline-block; }
+
+
+.ixl-domain { background: var(--paper); border: 1px solid var(--rule); margin-bottom: 18px; }
+.ixl-domain-head { display: grid; grid-template-columns: 1fr auto auto auto; gap: 12px; align-items: center; padding: 12px 18px; }
+.ixl-domain.t1 .ixl-domain-head { background: rgba(200,69,69,0.10); border-left: 4px solid var(--below); }
+.ixl-domain.t2 .ixl-domain-head { background: rgba(200,144,69,0.12); border-left: 4px solid var(--app); }
+.ixl-domain.t3 .ixl-domain-head { background: rgba(212,169,52,0.14); border-left: 4px solid #d4a934; }
+.ixl-domain-head .domain-name { font-family: 'Fraunces', serif; font-weight: 600; font-size: 18px; }
+.ixl-domain-head .std-tag { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; background: var(--navy); color: var(--paper); padding: 4px 9px; }
+.ixl-domain-head .tier-badge { font-family: 'IBM Plex Sans', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--paper); padding: 4px 9px; }
+.ixl-domain.t1 .tier-badge { background: var(--tier1); }
+.ixl-domain.t2 .tier-badge { background: var(--tier2); }
+.ixl-domain.t3 .tier-badge { background: var(--tier3); color: var(--ink); }
+.ixl-domain-head .pct-tag { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--below); font-weight: 600; }
+.ixl-domain .desc { padding: 0 18px 10px; font-size: 12.5px; font-style: italic; color: var(--ink-soft); }
+.ixl-domain .skills-list { border-top: 1px solid var(--rule); }
+.ixl-skill-row { display: grid; grid-template-columns: 30px 1fr 80px 100px; gap: 12px; align-items: center; padding: 8px 18px; border-bottom: 1px dotted var(--rule-soft); font-size: 13px; }
+.ixl-skill-row:last-child { border-bottom: none; }
+.ixl-skill-row.critical { background: rgba(31,56,100,0.03); }
+.ixl-skill-row .arrow { color: var(--accent); font-weight: 700; font-size: 16px; text-align: center; }
+.ixl-skill-row .name { line-height: 1.4; }
+.ixl-skill-row.critical .name { font-weight: 600; }
+.ixl-skill-row .code { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; color: var(--navy); background: var(--rule-soft); padding: 3px 9px; text-align: center; letter-spacing: 0.05em; }
+.ixl-skill-row .priority-pill { font-family: 'IBM Plex Sans', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; padding: 4px 8px; text-align: center; }
+.ixl-skill-row .priority-pill.start { background: var(--navy); color: var(--paper); }
+.ixl-skill-row .priority-pill.support { background: transparent; color: var(--ink-soft); font-weight: 400; font-style: italic; }
+.ixl-day-codes { font-family: 'JetBrains Mono', monospace; font-weight: 600; color: var(--navy); }
+.ixl-day-codes span { display: inline-block; background: var(--rule-soft); padding: 3px 7px; margin-right: 4px; font-size: 11px; }
+
+
+.mn-domain { background: var(--paper); border: 1px solid var(--rule); margin-bottom: 18px; }
+.mn-domain-head { display: grid; grid-template-columns: 1fr auto auto auto auto; gap: 10px; align-items: center; padding: 12px 18px; }
+.mn-domain.t1 .mn-domain-head { background: rgba(200,69,69,0.10); border-left: 4px solid var(--below); }
+.mn-domain.t2 .mn-domain-head { background: rgba(200,144,69,0.12); border-left: 4px solid var(--app); }
+.mn-domain.t3 .mn-domain-head { background: rgba(212,169,52,0.14); border-left: 4px solid #d4a934; }
+.mn-domain-head .domain-name { font-family: 'Fraunces', serif; font-weight: 600; font-size: 17px; }
+.mn-domain-head .ga-tag { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #1f7a1f; background: rgba(31,122,31,0.10); padding: 4px 9px; }
+
+
+
+.mn-domain-head .tier-badge { font-family: 'IBM Plex Sans', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--paper); padding: 4px 9px; }
+.mn-domain.t1 .tier-badge { background: var(--tier1); }
+.mn-domain.t2 .tier-badge { background: var(--tier2); }
+.mn-domain.t3 .tier-badge { background: var(--tier3); color: var(--ink); }
+.mn-domain-head .pct-tag { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--below); font-weight: 600; }
+.mn-sub-row { display: grid; grid-template-columns: 110px 1fr 1.1fr; gap: 12px; align-items: center; padding: 9px 18px; border-top: 1px solid var(--rule); font-size: 13px; }
+.mn-sub-row .sub-code { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; color: var(--navy); }
+.mn-sub-row .sub-desc { line-height: 1.4; }
+.mn-sub-row .sub-lessons { font-weight: 600; color: var(--navy); font-size: 12.5px; }
+.mn-gap { background: rgba(200,69,69,0.06); border-top: 1px dotted var(--below); padding: 8px 18px 8px 130px; font-size: 12px; font-style: italic; color: var(--below); line-height: 1.4; }
+.mn-day-lessons { font-family: 'JetBrains Mono', monospace; font-weight: 600; color: var(--navy); font-size: 12px; }
+
+@media print {
+  nav.tabs { display: none; }
+  .panel { display: block !important; page-break-after: always; }
+  body { background: white; }
+  .tile, .week, .profile, .table-wrap, .group-card { break-inside: avoid; }
+}
+
+@media (max-width: 900px) {
+  .days { grid-template-columns: 1fr; }
+  .day { border-right: none; border-bottom: 1px solid var(--rule-soft); }
+  .masthead h1 { font-size: 36px; }
+  .bar-row { grid-template-columns: 1fr; gap: 6px; }
+  .group-notes { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="masthead">
+    <div class="kicker">McIntosh County Academy &nbsp;·&nbsp; Spring 2026 EOC &nbsp;·&nbsp; Internal Coaching Document</div>
+    <h1>Algebra: Concepts <em>&amp;</em> Connections</h1>
+    <h1 style="font-size:32px; font-weight:500; font-style:italic; color:var(--accent); margin-top:-6px;">Remediation Dashboard</h1>
+    <div class="meta">
+      <span><b>Cohort cutoff:</b> Grade Conversion Score ≤ 69</span>
+      <span><b>Plan length:</b> 3 weeks (15 instructional days)</span>
+      <span><b>Frameworks:</b> GA GSE · BWD · DOK · Milestones ALDs</span>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="active" data-tab="overview">Overview</button>
+    <button data-tab="cohort">Cohort Dashboard</button>
+    <button data-tab="group">Whole Group Domain</button>
+    <button data-tab="cohort-domain">Cohort Domain Priority</button>
+    <button data-tab="groups">Groups</button>
+    <button data-tab="ixl">IXL Skills</button>
+    <button data-tab="mathnation">Math Nation</button>
+    <button data-tab="plan">3-Week Plan</button>
+    <button data-tab="profiles">Student Profiles</button>
+  </nav>
+
+  <section class="panel active" id="overview">
+    <h2>The Picture, at a Glance</h2>
+    <p class="section-sub">Where the class landed, who needs the pull, and what hurts the most.</p>
+    <div class="tiles" id="tilesGrid"></div>
+    <h3>Priority Findings</h3>
+    <div class="findings" id="findings"></div>
+    <h3>Linked Materials</h3>
+    <div class="table-wrap" id="linkedMaterialsWrap" style="margin-bottom:32px;"></div>
+
+    <h3>How This Dashboard Is Organized</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Tab</th><th>What you'll find</th></tr></thead>
+        <tbody>
+          <tr><td class="student-name">Cohort Dashboard</td><td>Individual domain performance for the 9 students at ≤69, with group badges. Hot-spot grid.</td></tr>
+          <tr><td class="student-name">Whole Group Domain</td><td>Class-wide performance on each of the 11 domains, with stacked bars.</td></tr>
+          <tr><td class="student-name">Cohort Domain Priority</td><td>Ranked priority list for the remediation cohort. Drives the plan.</td></tr>
+          <tr><td class="student-name">Groups</td><td>3 severity-tiered groups of 3 for daily rotation, with differentiated scaffolding and pace.</td></tr>
+          <tr><td class="student-name">IXL Skills</td><td>Cohort-prioritized IXL skill alignment with "Start Here" tags and a day-by-day assignment map.</td></tr>
+          <tr><td class="student-name">Math Nation</td><td>MN+ Algebra 1 lesson locations per priority standard, with a day-by-day lesson map.</td></tr>
+          <tr><td class="student-name">3-Week Plan</td><td>Daily scope and sequence: standard, learning target, tasks, DOK mix, formative check.</td></tr>
+          <tr><td class="student-name">Student Profiles</td><td>One profile per cohort student to guide rotation / station assignments.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="panel" id="cohort">
+    <h2>Cohort Dashboard</h2>
+    <p class="section-sub">9 students at Grade Conversion Score ≤ 69. Group badges show daily rotation assignment.</p>
+    <div class="controls">
+      <label>Filter by domain status:
+        <select id="cohortFilter">
+          <option value="all">Show all</option>
+          <option value="Below Target">Only Below Target</option>
+          <option value="Approaching Target">Only Approaching</option>
+          <option value="Met Target">Only Met</option>
+        </select>
+      </label>
+    </div>
+    <div class="table-wrap"><table id="cohortTable"></table></div>
+  </section>
+
+  <section class="panel" id="group">
+    <h2>Whole Group Domain Performance</h2>
+    <p class="section-sub">Class-wide (n=33 unique students). Bar segments scale to count of students in each band.</p>
+    <div id="groupBars"></div>
+  </section>
+
+  <section class="panel" id="cohort-domain">
+    <h2>Cohort Domain Priority</h2>
+    <p class="section-sub">Ranked by average performance index (1.00=all Below, 3.00=all Met). Tiers drive the 3-week sequence.</p>
+    <div class="table-wrap"><table id="cohortDomainTable"></table></div>
+    <h3 style="margin-top:32px;">Distribution View</h3>
+    <div id="cohortBars"></div>
+  </section>
+
+  <section class="panel" id="groups">
+    <h2>Remediation Groups</h2>
+    <p class="section-sub">3 groups of 3 built on severity: GCS → count of domains Below Target → average domain index. Same daily target, differentiated scaffolding.</p>
+
+    <div style="background:var(--paper); border:1px solid var(--rule); padding: 16px 22px; margin-bottom: 24px; font-size:13px;">
+      <strong style="font-family: 'Fraunces', serif; font-size: 16px; display:block; margin-bottom: 8px;">How to use these groups</strong>
+      <ul style="padding-left: 20px; margin: 0;">
+        <li style="margin-bottom: 6px;"><b>Rotation model:</b> All 3 groups receive the same daily learning target, but differ in scaffolding depth, pace, and independent task. Teacher rotates through 12-15 min small-group instruction with each.</li>
+        <li style="margin-bottom: 6px;"><b>Why severity, not single-domain:</b> Every cohort student is Below Target on multiple domains. Grouping by single-domain weakness is not productive. Severity grouping lets you modulate scaffolding instead of re-sequencing content.</li>
+        <li style="margin-bottom: 6px;"><b>Reassess after Week 1 checkpoint:</b> Students showing Approaching-level work move up. Students continuing to struggle move down.</li>
+        <li><b>Same content, different depth:</b> Group A gets concrete representations and slower pace. Group C gets faster pace and more application work.</li>
+      </ul>
+    </div>
+
+    <div id="groupCards"></div>
+
+    <h3>Suggested Daily Rotation (45-50 min block)</h3>
+    <div class="rotation-table">
+      <table>
+        <thead><tr>
+          <th>Time</th>
+          <th class="h-A">Group A: Foundation Rebuild</th>
+          <th class="h-B">Group B: Targeted Practice</th>
+          <th class="h-C">Group C: Accelerated Recovery</th>
+        </tr></thead>
+        <tbody id="rotationBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="panel" id="ixl">
+    <h2>IXL Skill Alignment</h2>
+    <p class="section-sub">Cohort-prioritized version of the GA Milestones Algebra IXL skill plan. Domains ranked by cohort % Below Target. "Start Here" tags flag the highest-leverage skills for this group.</p>
+
+    <div style="background:var(--paper); border:1px solid var(--rule); padding: 16px 22px; margin-bottom: 24px; font-size:13px;">
+      <strong style="font-family: 'Fraunces', serif; font-size: 16px; display:block; margin-bottom: 8px;">How to use</strong>
+      <ul style="padding-left: 20px; margin: 0;">
+        <li style="margin-bottom: 6px;"><b>Assign by code:</b> Students enter the skill code (e.g. KNV) in IXL's search to jump directly to the skill. Teachers can also assign by code from the analytics dashboard.</li>
+        <li style="margin-bottom: 6px;"><b>"Start Here" tag:</b> These are the highest-leverage skills for THIS cohort, identified by cross-referencing domain Below-Target percentages with the IXL skill list. Assign these first.</li>
+        <li style="margin-bottom: 6px;"><b>Tier colors:</b> Domains are sorted and colored by cohort priority. Red banner = Tier 1 Critical, amber = Tier 2 High, yellow = Tier 3 Moderate.</li>
+        <li><b>Daily assignment map:</b> The second table maps specific IXL codes to each of the 15 plan days. Assign the listed codes as homework or in-class follow-up.</li>
+      </ul>
+    </div>
+
+    <h3>Skills by Domain</h3>
+    <div id="ixlDomains"></div>
+
+    <h3 style="margin-top: 32px;">Daily IXL Assignment Map</h3>
+    <p class="section-sub">Which codes to assign each day of the 3-week plan.</p>
+    <div class="table-wrap"><table id="ixlDailyTable"></table></div>
+
+    <p style="margin-top: 24px; text-align: center;">
+      <a href="https://www.ixl.com/math/skill-plans/georgia-milestones-algebra" target="_blank" rel="noopener" class="open-link">Open the master IXL skill plan</a>
+    </p>
+  </section>
+
+  <section class="panel" id="mathnation">
+    <h2>Math Nation Lesson Alignment</h2>
+    <p class="section-sub">Where each cohort-priority standard lives in MN+ Algebra 1. Pair with the IXL Skills tab: Math Nation for instruction, IXL for skill practice.</p>
+
+    <div style="background: var(--paper); border:1px solid var(--rule); padding: 14px 20px; margin-bottom: 24px; font-size:13px;"><strong style="font-family:'Fraunces',serif; font-size:15px; display:block; margin-bottom:6px;">Standards note</strong>All tabs use the official Georgia DOE standard codes for Algebra: Concepts &amp; Connections (A.NR.5, A.PAR.4, A.PAR.6, A.PAR.8, A.FGR.2, A.FGR.7, A.FGR.9, A.GSR.3, A.DSR.10), consistent with the Math Nation and Georgia K-12 standards documents.</div>
+
+    <h3>Lesson Locations by Standard</h3>
+    <div id="mnDomains"></div>
+
+    <h3 style="margin-top:32px;">Daily Math Nation Lesson Map</h3>
+    <p class="section-sub">Which MN+ Algebra 1 lessons to pull for each day of the 3-week plan.</p>
+    <div class="table-wrap"><table id="mnDailyTable"></table></div>
+
+    <p style="margin-top:24px; text-align:center;">
+      <a href="https://www.mathnation.com" target="_blank" rel="noopener" class="open-link">Open Math Nation (teacher login required for lessons)</a>
+    </p>
+  </section>
+
+  <section class="panel" id="plan">
+    <h2>3-Week Remediation Plan</h2>
+    <p class="section-sub">Pull-out / small group / co-taught block. 45-50 min daily. Backward designed from the Milestones blueprint and cohort priority data.</p>
+    <div style="background:var(--paper); border:1px solid var(--rule); padding: 16px 22px; margin-bottom: 24px; font-size:13px;">
+      <strong style="font-family: 'Fraunces', serif; font-size: 16px; display:block; margin-bottom: 8px;">Daily Block Structure</strong>
+      <table style="font-size:12px;">
+        <tr><td style="font-weight:600; width:200px; padding: 4px 0;">Warm-up (5 min)</td><td style="padding: 4px 0;">Spiral DOK 1-2 retrieval of prior week's targets</td></tr>
+        <tr><td style="font-weight:600; padding: 4px 0;">Mini-lesson (12-15 min)</td><td style="padding: 4px 0;">Direct instruction on day's learning target, worked example, think-aloud</td></tr>
+        <tr><td style="font-weight:600; padding: 4px 0;">Guided practice (12-15 min)</td><td style="padding: 4px 0;">Teacher-led with cold-call checks for understanding, DOK 2</td></tr>
+        <tr><td style="font-weight:600; padding: 4px 0;">Independent / pair task (10 min)</td><td style="padding: 4px 0;">DOK 2-3 task with structured scaffold or partner protocol</td></tr>
+        <tr><td style="font-weight:600; padding: 4px 0;">Exit ticket (5 min)</td><td style="padding: 4px 0;">2-3 items, mix of DOK 1 and DOK 2, used to regroup for next day</td></tr>
+      </table>
+    </div>
+    <div id="planWeeks"></div>
+  </section>
+
+  <section class="panel" id="profiles">
+    <h2>Student Profiles</h2>
+    <p class="section-sub">One card per cohort student with group assignment. Domains sorted by performance, weakest first.</p>
+    <div id="profileCards"></div>
+  </section>
+
+  <div class="endmark">end of dashboard</div>
+</div>
+
+<script>
+const DATA = {"students": [{"name": "EDWARDS, ROBERT E", "gcs": 49, "scale": 402, "level": "Beginning Learner", "domains": {"GSR: Coordinate Geometry": "Below Target", "NR: Rational & Irrational": "Below Target", "PAR: Overall": "Below Target", "PAR: Linear Inequalities": "Below Target", "PAR: Quadratic Expr & Eqs": "Below Target", "PAR: Exponential Expr & Eqs": "Below Target", "FGR: Overall": "Below Target", "FGR: Arith Seq & Linear Fns": "Below Target", "FGR: Quadratic Functions": "Below Target", "FGR: Exponential Functions": "Below Target", "DSR: 1 & 2 Var Statistics": "Below Target"}, "below": 11, "app": 0, "met": 0, "avg": 1.0, "group": "A"}, {"name": "GRANT, ANTHONY K", "gcs": 58, "scale": 437, "level": "Beginning Learner", "domains": {"GSR: Coordinate Geometry": "Approaching Target", "NR: Rational & Irrational": "Below Target", "PAR: Overall": "Below Target", "PAR: Linear Inequalities": "Below Target", "PAR: Quadratic Expr & Eqs": "Below Target", "PAR: Exponential Expr & Eqs": "Below Target", "FGR: Overall": "Below Target", "FGR: Arith Seq & Linear Fns": "Below Target", "FGR: Quadratic Functions": "Below Target", "FGR: Exponential Functions": "Below Target", "DSR: 1 & 2 Var Statistics": "Below Target"}, "below": 10, "app": 1, "met": 0, "avg": 1.0909090909090908, "group": "A"}, {"name": "DAVILA-FABIANO, CHARLIZE O", "gcs": 60, "scale": 447, "level": "Beginning Learner", "domains": {"GSR: Coordinate Geometry": "Below Target", "NR: Rational & Irrational": "Below Target", "PAR: Overall": "Below Target", "PAR: Linear Inequalities": "Approaching Target", "PAR: Quadratic Expr & Eqs": "Below Target", "PAR: Exponential Expr & Eqs": "Below Target", "FGR: Overall": "Below Target", "FGR: Arith Seq & Linear Fns": "Below Target", "FGR: Quadratic Functions": "Below Target", "FGR: Exponential Functions": "Below Target", "DSR: 1 & 2 Var Statistics": "Below Target"}, "below": 10, "app": 1, "met": 0, "avg": 1.0909090909090908, "group": "A"}, {"name": "CUMMINGS, DAVE K", "gcs": 61, "scale": 450, "level": "Beginning Learner", "domains": {"GSR: Coordinate Geometry": "Below Target", "NR: Rational & Irrational": "Below Target", "PAR: Overall": "Below Target", "PAR: Linear Inequalities": "Below Target", "PAR: Quadratic Expr & Eqs": "Below Target", "PAR: Exponential Expr & Eqs": "Approaching Target", "FGR: Overall": "Below Target", "FGR: Arith Seq & Linear Fns": "Approaching Target", "FGR: Quadratic Functions": "Below Target", "FGR: Exponential Functions": "Below Target", "DSR: 1 & 2 Var Statistics": "Approaching Target"}, "below": 8, "app": 3, "met": 0, "avg": 1.2727272727272727, "group": "B"}, {"name": "HOLLIS, BRAELYN S", "gcs": 62, "scale": 455, "level": "Beginning Learner", "domains": {"GSR: Coordinate Geometry": "Below Target", "NR: Rational & Irrational": "Below Target", "PAR: Overall": "Below Target", "PAR: Linear Inequalities": "Below Target", "PAR: Quadratic Expr & Eqs": "Below Target", "PAR: Exponential Expr & Eqs": "Below Target", "FGR: Overall": "Below Target", "FGR: Arith Seq & Linear Fns": "Below Target", "FGR: Quadratic Functions": "Approaching Target", "FGR: Exponential Functions": "Approaching Target", "DSR: 1 & 2 Var Statistics": "Below Target"}, "below": 9, "app": 2, "met": 0, "avg": 1.1818181818181819, "group": "B"}, {"name": "BUTLER, MONTAVIOUS R", "gcs": 63, "scale": 457, "level": "Beginning Learner", "domains": {"GSR: Coordinate Geometry": "Below Target", "NR: Rational & Irrational": "Approaching Target", "PAR: Overall": "Below Target", "PAR: Linear Inequalities": "Below Target", "PAR: Quadratic Expr & Eqs": "Approaching Target", "PAR: Exponential Expr & Eqs": "Approaching Target", "FGR: Overall": "Below Target", "FGR: Arith Seq & Linear Fns": "Below Target", "FGR: Quadratic Functions": "Below Target", "FGR: Exponential Functions": "Below Target", "DSR: 1 & 2 Var Statistics": "Below Target"}, "below": 8, "app": 3, "met": 0, "avg": 1.2727272727272727, "group": "B"}, {"name": "WILSON, ZION J", "gcs": 63, "scale": 457, "level": "Beginning Learner", "domains": {"GSR: Coordinate Geometry": "Below Target", "NR: Rational & Irrational": "Below Target", "PAR: Overall": "Below Target", "PAR: Linear Inequalities": "Approaching Target", "PAR: Quadratic Expr & Eqs": "Below Target", "PAR: Exponential Expr & Eqs": "Below Target", "FGR: Overall": "Below Target", "FGR: Arith Seq & Linear Fns": "Below Target", "FGR: Quadratic Functions": "Approaching Target", "FGR: Exponential Functions": "Below Target", "DSR: 1 & 2 Var Statistics": "Approaching Target"}, "below": 8, "app": 3, "met": 0, "avg": 1.2727272727272727, "group": "C"}, {"name": "KEY, DUSTON W", "gcs": 69, "scale": 479, "level": "Developing Learner", "domains": {"GSR: Coordinate Geometry": "Approaching Target", "NR: Rational & Irrational": "Below Target", "PAR: Overall": "Below Target", "PAR: Linear Inequalities": "Below Target", "PAR: Quadratic Expr & Eqs": "Below Target", "PAR: Exponential Expr & Eqs": "Approaching Target", "FGR: Overall": "Below Target", "FGR: Arith Seq & Linear Fns": "Below Target", "FGR: Quadratic Functions": "Approaching Target", "FGR: Exponential Functions": "Below Target", "DSR: 1 & 2 Var Statistics": "Approaching Target"}, "below": 7, "app": 4, "met": 0, "avg": 1.3636363636363635, "group": "C"}, {"name": "JACKSON, DEVION D", "gcs": 69, "scale": 479, "level": "Developing Learner", "domains": {"GSR: Coordinate Geometry": "Below Target", "NR: Rational & Irrational": "Below Target", "PAR: Overall": "Below Target", "PAR: Linear Inequalities": "Below Target", "PAR: Quadratic Expr & Eqs": "Below Target", "PAR: Exponential Expr & Eqs": "Approaching Target", "FGR: Overall": "Below Target", "FGR: Arith Seq & Linear Fns": "Below Target", "FGR: Quadratic Functions": "Below Target", "FGR: Exponential Functions": "Approaching Target", "DSR: 1 & 2 Var Statistics": "Met Target"}, "below": 8, "app": 2, "met": 1, "avg": 1.3636363636363635, "group": "C"}, {"name": "HOLLIS, ALAUN K", "gcs": 71, "scale": 488, "level": "Developing Learner", "domains": {"GSR: Coordinate Geometry": "Approaching Target", "NR: Rational & Irrational": "Met Target", "PAR: Overall": "Below Target", "PAR: Linear Inequalities": "Below Target", "PAR: Quadratic Expr & Eqs": "Approaching Target", "PAR: Exponential Expr & Eqs": "Below Target", "FGR: Overall": "Below Target", "FGR: Arith Seq & Linear Fns": "Below Target", "FGR: Quadratic Functions": "Below Target", "FGR: Exponential Functions": "Met Target", "DSR: 1 & 2 Var Statistics": "Below Target"}}, {"name": "NORRIS, AVIANAH L", "gcs": 71, "scale": 488, "level": "Developing Learner", "domains": {"GSR: Coordinate Geometry": "Below Target", "NR: Rational & Irrational": "Below Target", "PAR: Overall": "Below Target", "PAR: Linear Inequalities": "Approaching Target", "PAR: Quadratic Expr & Eqs": "Approaching Target", "PAR: Exponential Expr & Eqs": "Approaching Target", "FGR: Overall": "Below Target", "FGR: Arith Seq & Linear Fns": "Below Target", "FGR: Quadratic Functions": "Approaching Target", "FGR: Exponential Functions": "Below Target", "DSR: 1 & 2 Var Statistics": "Approaching Target"}}, {"name": "VICKERS, JUSTIN D", "gcs": 71, "scale": 490, "level": "Developing Learner", "domains": {"GSR: Coordinate Geometry": "Met Target", "NR: Rational & Irrational": "Below Target", "PAR: Overall": "Below Target", "PAR: Linear Inequalities": "Approaching Target", "PAR: Quadratic Expr & Eqs": "Approaching Target", "PAR: Exponential Expr & Eqs": "Below Target", "FGR: Overall": "Below Target", "FGR: Arith Seq & Linear Fns": "Below Target", "FGR: Quadratic Functions": "Approaching Target", "FGR: Exponential Functions": "Below Target", "DSR: 1 & 2 Var Statistics": "Below Target"}}, {"name": "WORKMASTER, PAYTON L", "gcs": 71, "scale": 488, "level": "Developing Learner", "domains": {"GSR: Coordinate Geometry": "Below Target", "NR: Rational & Irrational": "Approaching Target", "PAR: Overall": "Approaching Target", "PAR: Linear Inequalities": "Approaching Target", "PAR: Quadratic Expr & Eqs": "Approaching Target", "PAR: Exponential Expr & Eqs": "Below Target", "FGR: Overall": "Below Target", "FGR: Arith Seq & Linear Fns": "Below Target", "FGR: Quadratic Functions": "Below Target", "FGR: Exponential Functions": "Approaching Target", "DSR: 1 & 2 Var Statistics": "Below Target"}}, {"name": "ROSS, ZACHARY C", "gcs": 72, "scale": 494, "level": "Developing Learner", "domains": {"GSR: Coordinate Geometry": "Below Target", "NR: Rational & Irrational": "Below Target", "PAR: Overall": "Approaching Target", "PAR: Linear Inequalities": "Approaching Target", "PAR: Quadratic Expr & Eqs": "Approaching Target", "PAR: Exponential Expr & Eqs": "Approaching Target", "FGR: Overall": "Below Target", "FGR: Arith Seq & Linear Fns": "Approaching Target", "FGR: Quadratic Functions": "Below Target", "FGR: Exponential Functions": "Below Target", "DSR: 1 & 2 Var Statistics": "Below Target"}}, {"name": "GROOVER, GAGE M", "gcs": 72, "scale": 492, "level": "Developing Learner", "domains": {"GSR: Coordinate Geometry": "Below Target", "NR: Rational & Irrational": "Approaching Target", "PAR: Overall": "Below Target", "PAR: Linear Inequalities": "Below Target", "PAR: Quadratic Expr & Eqs": "Below Target", "PAR: Exponential Expr & Eqs": "Approaching Target", "FGR: Overall": "Approaching Target", "FGR: Arith Seq & Linear Fns": "Met Target", "FGR: Quadratic Functions": "Below Target", "FGR: Exponential Functions": "Below Target", "DSR: 1 & 2 Var Statistics": "Approaching Target"}}, {"name": "GROOVER, GAVIN M", "gcs": 73, "scale": 496, "level": "Developing Learner", "domains": {"GSR: Coordinate Geometry": "Approaching Target", "NR: Rational & Irrational": "Met Target", "PAR: Overall": "Below Target", "PAR: Linear Inequalities": "Below Target", "PAR: Quadratic Expr & Eqs": "Below Target", "PAR: Exponential Expr & Eqs": "Approaching Target", "FGR: Overall": "Below Target", "FGR: Arith Seq & Linear Fns": "Approaching Target", "FGR: Quadratic Functions": "Approaching Target", "FGR: Exponential Functions": "Below Target", "DSR: 1 & 2 Var Statistics": "Approaching Target"}}, {"name": "SULLIVAN, JUSTICE M", "gcs": 74, "scale": 500, "level": "Developing Learner", "domains": {"GSR: Coordinate Geometry": "Below Target", "NR: Rational & Irrational": "Approaching Target", "PAR: Overall": "Below Target", "PAR: Linear Inequalities": "Below Target", "PAR: Quadratic Expr & Eqs": "Approaching Target", "PAR: Exponential Expr & Eqs": "Below Target", "FGR: Overall": "Approaching Target", "FGR: Arith Seq & Linear Fns": "Approaching Target", "FGR: Quadratic Functions": "Approaching Target", "FGR: Exponential Functions": "Met Target", "DSR: 1 & 2 Var Statistics": "Approaching Target"}}, {"name": "WILSON, ISAIAH J", "gcs": 74, "scale": 500, "level": "Developing Learner", "domains": {"GSR: Coordinate Geometry": "Below Target", "NR: Rational & Irrational": "Met Target", "PAR: Overall": "Approaching Target", "PAR: Linear Inequalities": "Below Target", "PAR: Quadratic Expr & Eqs": "Approaching Target", "PAR: Exponential Expr & Eqs": "Approaching Target", "FGR: Overall": "Below Target", "FGR: Arith Seq & Linear Fns": "Below Target", "FGR: Quadratic Functions": "Approaching Target", "FGR: Exponential Functions": "Below Target", "DSR: 1 & 2 Var Statistics": "Approaching Target"}}, {"name": "CAMPBELL, KEON K", "gcs": 75, "scale": 507, "level": "Developing Learner", "domains": {"GSR: Coordinate Geometry": "Approaching Target", "NR: Rational & Irrational": "Below Target", "PAR: Overall": "Approaching Target", "PAR: Linear Inequalities": "Below Target", "PAR: Quadratic Expr & Eqs": "Approaching Target", "PAR: Exponential Expr & Eqs": "Met Target", "FGR: Overall": "Below Target", "FGR: Arith Seq & Linear Fns": "Below Target", "FGR: Quadratic Functions": "Approaching Target", "FGR: Exponential Functions": "Below Target", "DSR: 1 & 2 Var Statistics": "Approaching Target"}}, {"name": "CAMPBELL, JASMINE N", "gcs": 75, "scale": 504, "level": "Developing Learner", "domains": {"GSR: Coordinate Geometry": "Approaching Target", "NR: Rational & Irrational": "Met Target", "PAR: Overall": "Below Target", "PAR: Linear Inequalities": "Approaching Target", "PAR: Quadratic Expr & Eqs": "Below Target", "PAR: Exponential Expr & Eqs": "Below Target", "FGR: Overall": "Approaching Target", "FGR: Arith Seq & Linear Fns": "Approaching Target", "FGR: Quadratic Functions": "Below Target", "FGR: Exponential Functions": "Met Target", "DSR: 1 & 2 Var Statistics": "Below Target"}}, {"name": "DEVERGER, ZALYN A", "gcs": 75, "scale": 508, "level": "Developing Learner", "domains": {"GSR: Coordinate Geometry": "Below Target", "NR: Rational & Irrational": "Met Target", "PAR: Overall": "Below Target", "PAR: Linear Inequalities": "Approaching Target", "PAR: Quadratic Expr & Eqs": "Below Target", "PAR: Exponential Expr & Eqs": "Below Target", "FGR: Overall": "Below Target", "FGR: Arith Seq & Linear Fns": "Below Target", "FGR: Quadratic Functions": "Met Target", "FGR: Exponential Functions": "Below Target", "DSR: 1 & 2 Var Statistics": "Approaching Target"}}, {"name": "ANDERSON, XZAVIER P", "gcs": 77, "scale": 515, "level": "Developing Learner", "domains": {"GSR: Coordinate Geometry": "Below Target", "NR: Rational & Irrational": "Below Target", "PAR: Overall": "Met Target", "PAR: Linear Inequalities": "Approaching Target", "PAR: Quadratic Expr & Eqs": "Met Target", "PAR: Exponential Expr & Eqs": "Approaching Target", "FGR: Overall": "Approaching Target", "FGR: Arith Seq & Linear Fns": "Below Target", "FGR: Quadratic Functions": "Approaching Target", "FGR: Exponential Functions": "Met Target", "DSR: 1 & 2 Var Statistics": "Approaching Target"}}, {"name": "CONTRASCERE, BRODY D", "gcs": 77, "scale": 515, "level": "Developing Learner", "domains": {"GSR: Coordinate Geometry": "Met Target", "NR: Rational & Irrational": "Below Target", "PAR: Overall": "Below Target", "PAR: Linear Inequalities": "Below Target", "PAR: Quadratic Expr & Eqs": "Approaching Target", "PAR: Exponential Expr & Eqs": "Approaching Target", "FGR: Overall": "Approaching Target", "FGR: Arith Seq & Linear Fns": "Approaching Target", "FGR: Quadratic Functions": "Approaching Target", "FGR: Exponential Functions": "Below Target", "DSR: 1 & 2 Var Statistics": "Approaching Target"}}, {"name": "PARHAM, MAKAYLA D", "gcs": 77, "scale": 513, "level": "Developing Learner", "domains": {"GSR: Coordinate Geometry": "Approaching Target", "NR: Rational & Irrational": "Below Target", "PAR: Overall": "Approaching Target", "PAR: Linear Inequalities": "Approaching Target", "PAR: Quadratic Expr & Eqs": "Met Target", "PAR: Exponential Expr & Eqs": "Approaching Target", "FGR: Overall": "Below Target", "FGR: Arith Seq & Linear Fns": "Below Target", "FGR: Quadratic Functions": "Approaching Target", "FGR: Exponential Functions": "Below Target", "DSR: 1 & 2 Var Statistics": "Approaching Target"}}, {"name": "TURNER, TAVIN N", "gcs": 78, "scale": 521, "level": "Developing Learner", "domains": {"GSR: Coordinate Geometry": "Approaching Target", "NR: Rational & Irrational": "Approaching Target", "PAR: Overall": "Below Target", "PAR: Linear Inequalities": "Approaching Target", "PAR: Quadratic Expr & Eqs": "Approaching Target", "PAR: Exponential Expr & Eqs": "Approaching Target", "FGR: Overall": "Approaching Target", "FGR: Arith Seq & Linear Fns": "Met Target", "FGR: Quadratic Functions": "Approaching Target", "FGR: Exponential Functions": "Below Target", "DSR: 1 & 2 Var Statistics": "Approaching Target"}}, {"name": "CARTER, JAEDEN M", "gcs": 78, "scale": 521, "level": "Developing Learner", "domains": {"GSR: Coordinate Geometry": "Below Target", "NR: Rational & Irrational": "Approaching Target", "PAR: Overall": "Approaching Target", "PAR: Linear Inequalities": "Approaching Target", "PAR: Quadratic Expr & Eqs": "Met Target", "PAR: Exponential Expr & Eqs": "Approaching Target", "FGR: Overall": "Approaching Target", "FGR: Arith Seq & Linear Fns": "Below Target", "FGR: Quadratic Functions": "Met Target", "FGR: Exponential Functions": "Below Target", "DSR: 1 & 2 Var Statistics": "Approaching Target"}}, {"name": "WILLIAMS, JAMERA N", "gcs": 78, "scale": 521, "level": "Developing Learner", "domains": {"GSR: Coordinate Geometry": "Below Target", "NR: Rational & Irrational": "Met Target", "PAR: Overall": "Approaching Target", "PAR: Linear Inequalities": "Met Target", "PAR: Quadratic Expr & Eqs": "Approaching Target", "PAR: Exponential Expr & Eqs": "Approaching Target", "FGR: Overall": "Approaching Target", "FGR: Arith Seq & Linear Fns": "Approaching Target", "FGR: Quadratic Functions": "Met Target", "FGR: Exponential Functions": "Below Target", "DSR: 1 & 2 Var Statistics": "Approaching Target"}}, {"name": "HUNTER, NOAH M", "gcs": 81, "scale": 528, "level": "Proficient Learner", "domains": {"GSR: Coordinate Geometry": "Below Target", "NR: Rational & Irrational": "Approaching Target", "PAR: Overall": "Approaching Target", "PAR: Linear Inequalities": "Approaching Target", "PAR: Quadratic Expr & Eqs": "Met Target", "PAR: Exponential Expr & Eqs": "Approaching Target", "FGR: Overall": "Approaching Target", "FGR: Arith Seq & Linear Fns": "Approaching Target", "FGR: Quadratic Functions": "Approaching Target", "FGR: Exponential Functions": "Below Target", "DSR: 1 & 2 Var Statistics": "Met Target"}}, {"name": "TROXLER, GABRIELLA M", "gcs": 81, "scale": 530, "level": "Proficient Learner", "domains": {"GSR: Coordinate Geometry": "Approaching Target", "NR: Rational & Irrational": "Met Target", "PAR: Overall": "Approaching Target", "PAR: Linear Inequalities": "Approaching Target", "PAR: Quadratic Expr & Eqs": "Approaching Target", "PAR: Exponential Expr & Eqs": "Approaching Target", "FGR: Overall": "Below Target", "FGR: Arith Seq & Linear Fns": "Met Target", "FGR: Quadratic Functions": "Below Target", "FGR: Exponential Functions": "Below Target", "DSR: 1 & 2 Var Statistics": "Met Target"}}, {"name": "WEST, JOSHUA L", "gcs": 82, "scale": 534, "level": "Proficient Learner", "domains": {"GSR: Coordinate Geometry": "Met Target", "NR: Rational & Irrational": "Below Target", "PAR: Overall": "Met Target", "PAR: Linear Inequalities": "Approaching Target", "PAR: Quadratic Expr & Eqs": "Approaching Target", "PAR: Exponential Expr & Eqs": "Met Target", "FGR: Overall": "Below Target", "FGR: Arith Seq & Linear Fns": "Below Target", "FGR: Quadratic Functions": "Approaching Target", "FGR: Exponential Functions": "Approaching Target", "DSR: 1 & 2 Var Statistics": "Met Target"}}, {"name": "RANDOLPH, AYANNA N", "gcs": 86, "scale": 555, "level": "Proficient Learner", "domains": {"GSR: Coordinate Geometry": "Approaching Target", "NR: Rational & Irrational": "Met Target", "PAR: Overall": "Met Target", "PAR: Linear Inequalities": "Approaching Target", "PAR: Quadratic Expr & Eqs": "Approaching Target", "PAR: Exponential Expr & Eqs": "Met Target", "FGR: Overall": "Met Target", "FGR: Arith Seq & Linear Fns": "Approaching Target", "FGR: Quadratic Functions": "Met Target", "FGR: Exponential Functions": "Met Target", "DSR: 1 & 2 Var Statistics": "Below Target"}}, {"name": "MORRIS, LUCAS W", "gcs": 87, "scale": 560, "level": "Proficient Learner", "domains": {"GSR: Coordinate Geometry": "Below Target", "NR: Rational & Irrational": "Met Target", "PAR: Overall": "Met Target", "PAR: Linear Inequalities": "Approaching Target", "PAR: Quadratic Expr & Eqs": "Met Target", "PAR: Exponential Expr & Eqs": "Met Target", "FGR: Overall": "Met Target", "FGR: Arith Seq & Linear Fns": "Met Target", "FGR: Quadratic Functions": "Met Target", "FGR: Exponential Functions": "Met Target", "DSR: 1 & 2 Var Statistics": "Approaching Target"}}, {"name": "COLLINS, ZYONNA S", "gcs": 94, "scale": 621, "level": "Distinguished Learner", "domains": {"GSR: Coordinate Geometry": "Met Target", "NR: Rational & Irrational": "Met Target", "PAR: Overall": "Met Target", "PAR: Linear Inequalities": "Met Target", "PAR: Quadratic Expr & Eqs": "Approaching Target", "PAR: Exponential Expr & Eqs": "Met Target", "FGR: Overall": "Met Target", "FGR: Arith Seq & Linear Fns": "Met Target", "FGR: Quadratic Functions": "Met Target", "FGR: Exponential Functions": "Met Target", "DSR: 1 & 2 Var Statistics": "Met Target"}}], "cohort": [{"name": "EDWARDS, ROBERT E", "gcs": 49, "scale": 402, "level": "Beginning Learner", "domains": {"GSR: Coordinate Geometry": "Below Target", "NR: Rational & Irrational": "Below Target", "PAR: Overall": "Below Target", "PAR: Linear Inequalities": "Below Target", "PAR: Quadratic Expr & Eqs": "Below Target", "PAR: Exponential Expr & Eqs": "Below Target", "FGR: Overall": "Below Target", "FGR: Arith Seq & Linear Fns": "Below Target", "FGR: Quadratic Functions": "Below Target", "FGR: Exponential Functions": "Below Target", "DSR: 1 & 2 Var Statistics": "Below Target"}, "below": 11, "app": 0, "met": 0, "avg": 1.0, "group": "A"}, {"name": "GRANT, ANTHONY K", "gcs": 58, "scale": 437, "level": "Beginning Learner", "domains": {"GSR: Coordinate Geometry": "Approaching Target", "NR: Rational & Irrational": "Below Target", "PAR: Overall": "Below Target", "PAR: Linear Inequalities": "Below Target", "PAR: Quadratic Expr & Eqs": "Below Target", "PAR: Exponential Expr & Eqs": "Below Target", "FGR: Overall": "Below Target", "FGR: Arith Seq & Linear Fns": "Below Target", "FGR: Quadratic Functions": "Below Target", "FGR: Exponential Functions": "Below Target", "DSR: 1 & 2 Var Statistics": "Below Target"}, "below": 10, "app": 1, "met": 0, "avg": 1.0909090909090908, "group": "A"}, {"name": "DAVILA-FABIANO, CHARLIZE O", "gcs": 60, "scale": 447, "level": "Beginning Learner", "domains": {"GSR: Coordinate Geometry": "Below Target", "NR: Rational & Irrational": "Below Target", "PAR: Overall": "Below Target", "PAR: Linear Inequalities": "Approaching Target", "PAR: Quadratic Expr & Eqs": "Below Target", "PAR: Exponential Expr & Eqs": "Below Target", "FGR: Overall": "Below Target", "FGR: Arith Seq & Linear Fns": "Below Target", "FGR: Quadratic Functions": "Below Target", "FGR: Exponential Functions": "Below Target", "DSR: 1 & 2 Var Statistics": "Below Target"}, "below": 10, "app": 1, "met": 0, "avg": 1.0909090909090908, "group": "A"}, {"name": "CUMMINGS, DAVE K", "gcs": 61, "scale": 450, "level": "Beginning Learner", "domains": {"GSR: Coordinate Geometry": "Below Target", "NR: Rational & Irrational": "Below Target", "PAR: Overall": "Below Target", "PAR: Linear Inequalities": "Below Target", "PAR: Quadratic Expr & Eqs": "Below Target", "PAR: Exponential Expr & Eqs": "Approaching Target", "FGR: Overall": "Below Target", "FGR: Arith Seq & Linear Fns": "Approaching Target", "FGR: Quadratic Functions": "Below Target", "FGR: Exponential Functions": "Below Target", "DSR: 1 & 2 Var Statistics": "Approaching Target"}, "below": 8, "app": 3, "met": 0, "avg": 1.2727272727272727, "group": "B"}, {"name": "HOLLIS, BRAELYN S", "gcs": 62, "scale": 455, "level": "Beginning Learner", "domains": {"GSR: Coordinate Geometry": "Below Target", "NR: Rational & Irrational": "Below Target", "PAR: Overall": "Below Target", "PAR: Linear Inequalities": "Below Target", "PAR: Quadratic Expr & Eqs": "Below Target", "PAR: Exponential Expr & Eqs": "Below Target", "FGR: Overall": "Below Target", "FGR: Arith Seq & Linear Fns": "Below Target", "FGR: Quadratic Functions": "Approaching Target", "FGR: Exponential Functions": "Approaching Target", "DSR: 1 & 2 Var Statistics": "Below Target"}, "below": 9, "app": 2, "met": 0, "avg": 1.1818181818181819, "group": "B"}, {"name": "BUTLER, MONTAVIOUS R", "gcs": 63, "scale": 457, "level": "Beginning Learner", "domains": {"GSR: Coordinate Geometry": "Below Target", "NR: Rational & Irrational": "Approaching Target", "PAR: Overall": "Below Target", "PAR: Linear Inequalities": "Below Target", "PAR: Quadratic Expr & Eqs": "Approaching Target", "PAR: Exponential Expr & Eqs": "Approaching Target", "FGR: Overall": "Below Target", "FGR: Arith Seq & Linear Fns": "Below Target", "FGR: Quadratic Functions": "Below Target", "FGR: Exponential Functions": "Below Target", "DSR: 1 & 2 Var Statistics": "Below Target"}, "below": 8, "app": 3, "met": 0, "avg": 1.2727272727272727, "group": "B"}, {"name": "WILSON, ZION J", "gcs": 63, "scale": 457, "level": "Beginning Learner", "domains": {"GSR: Coordinate Geometry": "Below Target", "NR: Rational & Irrational": "Below Target", "PAR: Overall": "Below Target", "PAR: Linear Inequalities": "Approaching Target", "PAR: Quadratic Expr & Eqs": "Below Target", "PAR: Exponential Expr & Eqs": "Below Target", "FGR: Overall": "Below Target", "FGR: Arith Seq & Linear Fns": "Below Target", "FGR: Quadratic Functions": "Approaching Target", "FGR: Exponential Functions": "Below Target", "DSR: 1 & 2 Var Statistics": "Approaching Target"}, "below": 8, "app": 3, "met": 0, "avg": 1.2727272727272727, "group": "C"}, {"name": "JACKSON, DEVION D", "gcs": 69, "scale": 479, "level": "Developing Learner", "domains": {"GSR: Coordinate Geometry": "Below Target", "NR: Rational & Irrational": "Below Target", "PAR: Overall": "Below Target", "PAR: Linear Inequalities": "Below Target", "PAR: Quadratic Expr & Eqs": "Below Target", "PAR: Exponential Expr & Eqs": "Approaching Target", "FGR: Overall": "Below Target", "FGR: Arith Seq & Linear Fns": "Below Target", "FGR: Quadratic Functions": "Below Target", "FGR: Exponential Functions": "Approaching Target", "DSR: 1 & 2 Var Statistics": "Met Target"}, "below": 8, "app": 2, "met": 1, "avg": 1.3636363636363635, "group": "C"}, {"name": "KEY, DUSTON W", "gcs": 69, "scale": 479, "level": "Developing Learner", "domains": {"GSR: Coordinate Geometry": "Approaching Target", "NR: Rational & Irrational": "Below Target", "PAR: Overall": "Below Target", "PAR: Linear Inequalities": "Below Target", "PAR: Quadratic Expr & Eqs": "Below Target", "PAR: Exponential Expr & Eqs": "Approaching Target", "FGR: Overall": "Below Target", "FGR: Arith Seq & Linear Fns": "Below Target", "FGR: Quadratic Functions": "Approaching Target", "FGR: Exponential Functions": "Below Target", "DSR: 1 & 2 Var Statistics": "Approaching Target"}, "below": 7, "app": 4, "met": 0, "avg": 1.3636363636363635, "group": "C"}], "domains": [{"name": "GSR: Coordinate Geometry", "std": "A.GSR.3"}, {"name": "NR: Rational & Irrational", "std": "A.NR.5"}, {"name": "PAR: Overall", "std": "A.PAR"}, {"name": "PAR: Linear Inequalities", "std": "A.PAR.4"}, {"name": "PAR: Quadratic Expr & Eqs", "std": "A.PAR.6"}, {"name": "PAR: Exponential Expr & Eqs", "std": "A.PAR.8"}, {"name": "FGR: Overall", "std": "A.FGR"}, {"name": "FGR: Arith Seq & Linear Fns", "std": "A.FGR.2"}, {"name": "FGR: Quadratic Functions", "std": "A.FGR.7"}, {"name": "FGR: Exponential Functions", "std": "A.FGR.9"}, {"name": "DSR: 1 & 2 Var Statistics", "std": "A.DSR.10"}], "groupStats": [{"name": "GSR: Coordinate Geometry", "std": "A.GSR.3", "n": 33, "below": 19, "app": 10, "met": 4, "avg": 1.55}, {"name": "NR: Rational & Irrational", "std": "A.NR.5", "n": 33, "below": 16, "app": 7, "met": 10, "avg": 1.82}, {"name": "PAR: Overall", "std": "A.PAR", "n": 33, "below": 19, "app": 9, "met": 5, "avg": 1.58}, {"name": "PAR: Linear Inequalities", "std": "A.PAR.4", "n": 33, "below": 14, "app": 17, "met": 2, "avg": 1.64}, {"name": "PAR: Quadratic Expr & Eqs", "std": "A.PAR.6", "n": 33, "below": 12, "app": 16, "met": 5, "avg": 1.79}, {"name": "PAR: Exponential Expr & Eqs", "std": "A.PAR.8", "n": 33, "below": 11, "app": 17, "met": 5, "avg": 1.82}, {"name": "FGR: Overall", "std": "A.FGR", "n": 33, "below": 21, "app": 9, "met": 3, "avg": 1.45}, {"name": "FGR: Arith Seq & Linear Fns", "std": "A.FGR.2", "n": 33, "below": 19, "app": 9, "met": 5, "avg": 1.58}, {"name": "FGR: Quadratic Functions", "std": "A.FGR.7", "n": 33, "below": 12, "app": 15, "met": 6, "avg": 1.82}, {"name": "FGR: Exponential Functions", "std": "A.FGR.9", "n": 33, "below": 22, "app": 4, "met": 7, "avg": 1.55}, {"name": "DSR: 1 & 2 Var Statistics", "std": "A.DSR.10", "n": 33, "below": 11, "app": 17, "met": 5, "avg": 1.82}], "cohortStats": [{"name": "GSR: Coordinate Geometry", "std": "A.GSR.3", "n": 9, "below": 7, "app": 2, "met": 0, "avg": 1.22}, {"name": "NR: Rational & Irrational", "std": "A.NR.5", "n": 9, "below": 8, "app": 1, "met": 0, "avg": 1.11}, {"name": "PAR: Overall", "std": "A.PAR", "n": 9, "below": 9, "app": 0, "met": 0, "avg": 1.0}, {"name": "PAR: Linear Inequalities", "std": "A.PAR.4", "n": 9, "below": 7, "app": 2, "met": 0, "avg": 1.22}, {"name": "PAR: Quadratic Expr & Eqs", "std": "A.PAR.6", "n": 9, "below": 8, "app": 1, "met": 0, "avg": 1.11}, {"name": "PAR: Exponential Expr & Eqs", "std": "A.PAR.8", "n": 9, "below": 5, "app": 4, "met": 0, "avg": 1.44}, {"name": "FGR: Overall", "std": "A.FGR", "n": 9, "below": 9, "app": 0, "met": 0, "avg": 1.0}, {"name": "FGR: Arith Seq & Linear Fns", "std": "A.FGR.2", "n": 9, "below": 8, "app": 1, "met": 0, "avg": 1.11}, {"name": "FGR: Quadratic Functions", "std": "A.FGR.7", "n": 9, "below": 6, "app": 3, "met": 0, "avg": 1.33}, {"name": "FGR: Exponential Functions", "std": "A.FGR.9", "n": 9, "below": 7, "app": 2, "met": 0, "avg": 1.22}, {"name": "DSR: 1 & 2 Var Statistics", "std": "A.DSR.10", "n": 9, "below": 5, "app": 3, "met": 1, "avg": 1.56}], "cohortStatsSorted": [{"name": "PAR: Overall", "std": "A.PAR", "n": 9, "below": 9, "app": 0, "met": 0, "avg": 1.0}, {"name": "FGR: Overall", "std": "A.FGR", "n": 9, "below": 9, "app": 0, "met": 0, "avg": 1.0}, {"name": "NR: Rational & Irrational", "std": "A.NR.5", "n": 9, "below": 8, "app": 1, "met": 0, "avg": 1.11}, {"name": "PAR: Quadratic Expr & Eqs", "std": "A.PAR.6", "n": 9, "below": 8, "app": 1, "met": 0, "avg": 1.11}, {"name": "FGR: Arith Seq & Linear Fns", "std": "A.FGR.2", "n": 9, "below": 8, "app": 1, "met": 0, "avg": 1.11}, {"name": "GSR: Coordinate Geometry", "std": "A.GSR.3", "n": 9, "below": 7, "app": 2, "met": 0, "avg": 1.22}, {"name": "PAR: Linear Inequalities", "std": "A.PAR.4", "n": 9, "below": 7, "app": 2, "met": 0, "avg": 1.22}, {"name": "FGR: Exponential Functions", "std": "A.FGR.9", "n": 9, "below": 7, "app": 2, "met": 0, "avg": 1.22}, {"name": "FGR: Quadratic Functions", "std": "A.FGR.7", "n": 9, "below": 6, "app": 3, "met": 0, "avg": 1.33}, {"name": "PAR: Exponential Expr & Eqs", "std": "A.PAR.8", "n": 9, "below": 5, "app": 4, "met": 0, "avg": 1.44}, {"name": "DSR: 1 & 2 Var Statistics", "std": "A.DSR.10", "n": 9, "below": 5, "app": 3, "met": 1, "avg": 1.56}], "plan": [{"title": "Week 1", "theme": "Number Sense + Linear Foundations", "rationale": "Rebuilds the foundation needed before quadratics. Numerical Reasoning (89% Below) and Arithmetic Sequences/Linear Functions (89% Below) both block downstream content.", "days": [{"day": "Mon", "std": "A.NR.5", "target": "I can classify real numbers as rational or irrational and justify with a representation.", "tasks": "Real Number Sort cards; number-line placement task; Frayer model", "dok": "1: 50% / 2: 50%", "check": "3-item exit: classify, justify, place on number line"}, {"day": "Tue", "std": "A.NR.5", "target": "I can perform operations with radicals and simplify radical expressions.", "tasks": "4 worked examples; partner trade-and-check; error analysis task", "dok": "1: 40% / 2: 60%", "check": "4-item exit: simplify 2, error analysis 2"}, {"day": "Wed", "std": "A.FGR.2 / A.GSR.3", "target": "I can write a linear equation from two points and interpret slope as a rate of change.", "tasks": "Coordinate plane stations: slope, midpoint, distance (3 stations, 8 min each)", "dok": "1: 30% / 2: 60% / 3: 10%", "check": "3-item exit including 1 context interpretation"}, {"day": "Thu", "std": "A.FGR.2", "target": "I can identify and extend arithmetic sequences and connect them to linear functions.", "tasks": "Sequence-to-function bridge organizer; compare-and-contrast task", "dok": "1: 30% / 2: 70%", "check": "3-item exit: extend, write explicit form, predict term"}, {"day": "Fri", "std": "A.PAR.4", "target": "I can solve and graph linear inequalities and represent solutions on a number line and coordinate plane.", "tasks": "Inequality matching (4 graphs / 4 inequalities); Week 1 checkpoint (8 items)", "dok": "1: 30% / 2: 50% / 3: 20%", "check": "Week 1 checkpoint: 8 items across A.NR.5, A.FGR.2, A.PAR.4, A.GSR.3", "link": {"label": "Open Friday Checkpoint", "url": "https://docs.google.com/document/d/1NYuwme9S_Ag_qtKIaiC7aoOFw2e6EjH5/edit?usp=sharing"}}]}, {"title": "Week 2", "theme": "Quadratics", "rationale": "Largest single content block in PAR/FGR. Quadratic Expressions (89% Below) and Quadratic Functions (67% Below) drive the largest score gains if mastered.", "days": [{"day": "Mon", "std": "A.PAR.6", "target": "I can factor quadratic expressions of the form ax\u00b2 + bx + c.", "tasks": "Box method demo; \"factor or not\" sort; structured worked examples", "dok": "1: 40% / 2: 60%", "check": "4-item exit: factor 3, identify non-factorable 1"}, {"day": "Tue", "std": "A.PAR.6", "target": "I can solve quadratic equations by factoring, square roots, and the quadratic formula.", "tasks": "Method-choice flowchart; cold-call sequence; quadratic formula scaffold", "dok": "1: 30% / 2: 60% / 3: 10%", "check": "4-item exit: 2 factoring, 1 square roots, 1 formula"}, {"day": "Wed", "std": "A.FGR.7", "target": "I can identify the vertex, axis of symmetry, and intercepts of a quadratic function.", "tasks": "Three-forms anchor chart; Desmos exploration; transformation card sort", "dok": "1: 30% / 2: 60% / 3: 10%", "check": "4-item exit with 1 contextual interpretation"}, {"day": "Thu", "std": "A.FGR.7", "target": "I can model a real-world situation with a quadratic function and interpret key features.", "tasks": "Projectile motion task (Milestones item style); collaborative protocol", "dok": "2: 50% / 3: 50%", "check": "2 multi-step constructed-response items"}, {"day": "Fri", "std": "A.PAR.6 / A.FGR.7", "target": "I can choose and apply the right strategy for any quadratic expression, equation, or function task.", "tasks": "Mixed quadratics gauntlet (10 items); Week 2 checkpoint", "dok": "1: 20% / 2: 60% / 3: 20%", "check": "Week 2 checkpoint: 10 items, mixed quadratics", "link": {"label": "Open Friday Checkpoint", "url": "https://docs.google.com/document/d/1AVu4evG7uQm4kvB1vKYeJEs6pg3c_IBd/edit?usp=sharing"}}]}, {"title": "Week 3", "theme": "Exponentials + Synthesis", "rationale": "Closes out the function family progression. Final two days are mixed-domain spiral and a blueprint-weighted summative checkpoint.", "days": [{"day": "Mon", "std": "A.PAR.8", "target": "I can apply integer and rational exponent rules to simplify exponential expressions.", "tasks": "Exponent rules ladder; \"spot the error\" task; rational exponent drill", "dok": "1: 50% / 2: 50%", "check": "5-item exit: simplify and convert"}, {"day": "Tue", "std": "A.PAR.8", "target": "I can solve exponential equations with common bases and simple applications.", "tasks": "Worked examples 1-base, 2-base, mixed; structured note guide; partner check", "dok": "1: 30% / 2: 60% / 3: 10%", "check": "4-item exit"}, {"day": "Wed", "std": "A.FGR.9", "target": "I can identify growth vs decay in exponential functions and interpret the base and initial value.", "tasks": "Growth-vs-decay sort; context interpretation (Milestones style)", "dok": "1: 30% / 2: 50% / 3: 20%", "check": "4-item exit with 1 contextual interpretation"}, {"day": "Thu", "std": "Mixed spiral", "target": "I can analyze a multi-domain problem and choose the right tool from my full algebra toolkit.", "tasks": "Released GA Milestones item set (8 items, mixed); structured discussion protocol", "dok": "1: 20% / 2: 50% / 3: 30%", "check": "Discussion-based; teacher observation rubric"}, {"day": "Fri", "std": "Summative", "target": "I can demonstrate mastery on a representative sample of the EOC blueprint.", "tasks": "Summative checkpoint (15-20 items, blueprint-weighted, released items)", "dok": "1: 25% / 2: 50% / 3: 25%", "check": "Summative checkpoint scored against ALD bands", "link": {"label": "Open Friday Summative", "url": "https://docs.google.com/document/d/1wbFPbcrS3xodmn-ggG4Jrt6KT-5rCnkj/edit?usp=sharing"}}]}], "groupMeta": {"A": {"name": "Group A: Foundation Rebuild", "profile": "Beginning Learners, GCS 49-60, 10-11 of 11 domains Below Target. Multiple foundational gaps that block grade-level access.", "scaffolding": "Concrete-Representational-Abstract sequence. Manipulatives or visual models before symbolic work. Worked-example pairs (you do / we do) before independent practice. Comprehension checks every 3-5 minutes.", "pace": "Slower. Plan 1.5x time on each learning target. May need to cut the Day 4 independent task and replace with extended guided practice.", "task": "DOK 1-2 only initially. Reduced problem set size. Partially-worked examples. Sentence stems for justification.", "check": "Verbal restate of target before exit. Modified exit: 2 items instead of 3, simpler numbers."}, "B": {"name": "Group B: Targeted Practice", "profile": "Beginning Learners, GCS 61-63, 8-9 domains Below Target. Has some foundation, needs structured repetition and gap-filling.", "scaffolding": "Standard small-group instruction: worked example, guided practice, independent work. Anchor charts available but not pre-filled.", "pace": "On-pace with the 3-week plan. No major modifications.", "task": "DOK 1-2 with one DOK 3 item per day. Standard problem set size. Partner protocols for verification.", "check": "Standard exit ticket (3-4 items). Use error analysis as a strength."}, "C": {"name": "Group C: Accelerated Recovery", "profile": "Beginning to Developing Learners, GCS 63-69, 7-8 domains Below Target with some Approaching or Met. Closer to proficiency, can move faster.", "scaffolding": "Brief mini-lesson only. Mostly independent or pair work with teacher conferencing. Pull these students last in rotation so they preview the task while waiting.", "pace": "Faster. Add a DOK 3 extension to each day. By Day 5 working on mixed-domain spiral items beyond the day\u2019s target.", "task": "DOK 2-3 dominant. Application contexts. Released Milestones items at grade-level difficulty.", "check": "Extended exit ticket (4-5 items) including 1 DOK 3 application or constructed-response item."}}, "rotation": [{"time": "0-5 min", "whole": "WHOLE CLASS: Warm-up DOK 1-2 spiral of prior day\u2019s target"}, {"time": "5-20 min", "a": "Teacher-led mini-lesson (concrete model, slower pace)", "b": "Independent task: Day n-1 spiral with answer key check", "c": "Independent task: Day n-1 spiral + DOK 3 extension"}, {"time": "20-35 min", "a": "Guided practice with worked examples; verbal restate", "b": "Teacher-led mini-lesson (standard pace)", "c": "Pair task: preview day\u2019s target with partner protocol"}, {"time": "35-45 min", "a": "Independent task (modified: fewer items, simpler numbers)", "b": "Independent / pair task on day\u2019s target", "c": "Teacher conference + DOK 3 application extension"}, {"time": "45-50 min", "whole": "WHOLE CLASS: Differentiated exit ticket (A: 2 items modified | B: 3-4 items standard | C: 4-5 items with DOK 3)"}], "totals": {"tested": 33, "cohortN": 9, "beginning": 7, "developing": 20, "proficient": 5, "distinguished": 1}, "linkedMaterials": [{"title": "Week 1 Friday Checkpoint", "description": "Standard + Modified forms, answer key, item analysis tracker", "url": "https://docs.google.com/document/d/1NYuwme9S_Ag_qtKIaiC7aoOFw2e6EjH5/edit?usp=sharing", "week": "1", "day": "Fri", "type": "Checkpoint"}, {"title": "Week 2 Friday Checkpoint", "description": "Quadratics. 10 standard items + 8 modified. Answer key and tracker.", "url": "https://docs.google.com/document/d/1AVu4evG7uQm4kvB1vKYeJEs6pg3c_IBd/edit?usp=sharing", "week": "2", "day": "Fri", "type": "Checkpoint"}, {"title": "Week 3 Friday Summative", "description": "Blueprint-weighted summative. 16 standard + 12 modified. End-of-remediation summary.", "url": "https://docs.google.com/document/d/1wbFPbcrS3xodmn-ggG4Jrt6KT-5rCnkj/edit?usp=sharing", "week": "3", "day": "Fri", "type": "Summative"}, {"title": "Daily Warm-Up Bank", "description": "15 days of DOK 1-2 retrieval items. Student version + teacher version with answer key.", "url": "https://docs.google.com/document/d/1ntalMHM4yLjfdTC17kzW7fezpS5VlyC_/edit?usp=sharing", "week": "All", "day": "Daily", "type": "Practice"}, {"title": "Anchor Charts", "description": "Three printable wall references: Radicals, Three Forms of a Quadratic, Growth vs Decay.", "url": "https://drive.google.com/file/d/1vEVDX_888GvxXtFIDk0nsKcLjYjIiGky/view?usp=sharing", "week": "All", "day": "Reference", "type": "Reference"}, {"title": "IXL Skill Plan: GA Milestones Algebra", "description": "Master IXL alignment. Cohort-prioritized version in the IXL Skills tab.", "url": "https://www.ixl.com/math/skill-plans/georgia-milestones-algebra", "week": "All", "day": "Reference", "type": "Practice"}, {"title": "Math Nation (MN+ Algebra 1)", "description": "Instructional video lessons. Per-standard lesson locations in the Math Nation tab. Teacher login required.", "url": "https://www.mathnation.com", "week": "All", "day": "Reference", "type": "Instruction"}], "ixlBaseUrl": "https://www.ixl.com/math/skill-plans/georgia-milestones-algebra", "ixlDomains": [{"domain": "Numerical Reasoning", "standard": "A.NR.5", "tier": "Tier 1 Critical", "description": "Investigate rational and irrational numbers; rewrite expressions with square roots and cube roots.", "cohortPctBelow": "89%", "skills": [{"name": "Classify rational and irrational numbers", "code": "3S8", "critical": true}, {"name": "Simplify radical expressions: mixed review", "code": "YZC", "critical": true}, {"name": "Properties of operations on rational and irrational numbers", "code": "C7S", "critical": false}]}, {"domain": "PAR: Quadratic Expressions & Equations", "standard": "A.PAR.6", "tier": "Tier 1 Critical", "description": "Build quadratic expressions and equations; solve quadratic equations in applicable situations.", "cohortPctBelow": "89%", "skills": [{"name": "Multiply two binomials", "code": "M7Q", "critical": true}, {"name": "Factor quadratics with other leading coefficients", "code": "7ED", "critical": true}, {"name": "Factor quadratics: special cases", "code": "56E", "critical": true}, {"name": "Checkpoint: Solve quadratic equations", "code": "KNV", "critical": true}, {"name": "Add and subtract polynomials", "code": "RLQ", "critical": false}, {"name": "Multiply two binomials: special cases", "code": "9JN", "critical": false}, {"name": "Interpret parts of quadratic expressions: word problems", "code": "VHB", "critical": false}]}, {"domain": "FGR: Arithmetic Sequences & Linear Functions", "standard": "A.FGR.2", "tier": "Tier 1 Critical", "description": "Construct and interpret arithmetic sequences as functions; use formal notation for linear functions.", "cohortPctBelow": "89%", "skills": [{"name": "Write variable expressions for arithmetic sequences", "code": "5VF", "critical": true}, {"name": "Complete a table and graph a linear function", "code": "JFG", "critical": true}, {"name": "Checkpoint: Write linear functions", "code": "AYR", "critical": true}, {"name": "Write a recursive formula: arithmetic sequences", "code": "QYM", "critical": false}, {"name": "Convert between explicit and recursive formulas: arithmetic sequences", "code": "SBG", "critical": false}, {"name": "Interpret functions using everyday language", "code": "U98", "critical": false}, {"name": "Evaluate a linear function from its graph: word problems", "code": "STU", "critical": false}, {"name": "Checkpoint: Graph and analyze linear functions", "code": "WJY", "critical": false}, {"name": "Identify linear, quadratic, and exponential functions from graphs", "code": "DHB", "critical": false}]}, {"domain": "GSR: Coordinate Geometry", "standard": "A.GSR.3", "tier": "Tier 2 High", "description": "Solve problems involving distance, midpoint, slope, area, and perimeter.", "cohortPctBelow": "78%", "skills": [{"name": "Find the slope from two points", "code": "MD5", "critical": true}, {"name": "Checkpoint: Distance and midpoints in the coordinate plane", "code": "TVR", "critical": true}, {"name": "Find the slope of a graph", "code": "E7D", "critical": false}, {"name": "Find a missing coordinate using slope", "code": "5C7", "critical": false}, {"name": "Area and perimeter: word problems", "code": "EFA", "critical": false}, {"name": "Pythagorean theorem: word problems", "code": "EU8", "critical": false}, {"name": "Checkpoint: Parallel and perpendicular lines", "code": "RNK", "critical": false}]}, {"domain": "PAR: Linear Inequalities", "standard": "A.PAR.4", "tier": "Tier 2 High", "description": "Create, analyze, and solve linear inequalities in two variables and systems of linear inequalities.", "cohortPctBelow": "78%", "skills": [{"name": "Linear inequalities: solve for y", "code": "UYU", "critical": true}, {"name": "Checkpoint: Linear inequalities and systems of inequalities", "code": "D6Y", "critical": true}, {"name": "Write a linear inequality from a graph", "code": "N9W", "critical": false}]}, {"domain": "FGR: Exponential Functions", "standard": "A.FGR.9", "tier": "Tier 2 High", "description": "Construct and analyze the graph of an exponential function; compare exponential, linear, and quadratic functions.", "cohortPctBelow": "78%", "skills": [{"name": "Evaluate an exponential function", "code": "D6H", "critical": true}, {"name": "Checkpoint: Graph and analyze exponential functions", "code": "ZQA", "critical": true}, {"name": "Write variable expressions for geometric sequences", "code": "XPC", "critical": false}, {"name": "Write a recursive formula: geometric sequences", "code": "JM6", "critical": false}, {"name": "Convert between explicit and recursive formulas: geometric sequences", "code": "9R3", "critical": false}, {"name": "Checkpoint: Evaluate and compare functions", "code": "YVN", "critical": false}]}, {"domain": "FGR: Quadratic Functions", "standard": "A.FGR.7", "tier": "Tier 3 Moderate", "description": "Construct and interpret quadratic functions; describe key characteristics of the graph.", "cohortPctBelow": "67%", "skills": [{"name": "Characteristics of quadratic functions: equations", "code": "YJZ", "critical": true}, {"name": "Write a quadratic function in vertex form", "code": "W2Q", "critical": true}, {"name": "Complete a function table: quadratic functions", "code": "LFV", "critical": false}, {"name": "Domain and range of quadratic functions: equations", "code": "4J7", "critical": false}, {"name": "Checkpoint: Graphs and transformations of quadratic functions", "code": "FZ8", "critical": false}, {"name": "Write a quadratic function in vertex form from its vertex and another point", "code": "YGV", "critical": false}]}, {"domain": "PAR: Exponential Expressions & Equations", "standard": "A.PAR.8", "tier": "Tier 3 Moderate", "description": "Create and analyze exponential expressions and equations.", "cohortPctBelow": "56%", "skills": [{"name": "Exponential growth and decay: word problems", "code": "UKG", "critical": true}, {"name": "Checkpoint: Write and interpret exponential functions", "code": "RWH", "critical": true}, {"name": "Compound interest: word problems", "code": "QSF", "critical": false}]}, {"domain": "Data & Statistical Reasoning", "standard": "A.DSR.10", "tier": "Tier 3 Moderate", "description": "Collect, analyze, and interpret univariate and bivariate data.", "cohortPctBelow": "56%", "skills": [{"name": "Choose appropriate measures of center and variation", "code": "MHC", "critical": true}, {"name": "Interpret a scatter plot", "code": "8BS", "critical": false}, {"name": "Analyze a regression line of a data set", "code": "8D8", "critical": false}, {"name": "Checkpoint: Compare data sets", "code": "DJA", "critical": false}, {"name": "Checkpoint: Linear modeling", "code": "TSA", "critical": false}]}], "ixlDaily": [{"day": 1, "codes": ["3S8"], "note": "After mini-lesson, assign as exit practice"}, {"day": 2, "codes": ["YZC", "C7S"], "note": "Both reinforce today's radical simplification"}, {"day": 3, "codes": ["MD5", "TVR"], "note": "Slope from two points + distance/midpoint checkpoint"}, {"day": 4, "codes": ["5VF", "QYM"], "note": "Arithmetic sequence expressions + recursive formula"}, {"day": 5, "codes": ["UYU", "D6Y"], "note": "Linear inequality practice before Friday checkpoint"}, {"day": 6, "codes": ["RLQ", "M7Q"], "note": "Polynomial operations + binomial multiplication"}, {"day": 7, "codes": ["7ED", "56E"], "note": "Factoring practice (both general and special cases)"}, {"day": 8, "codes": ["KNV", "YJZ"], "note": "Solve quadratic equations + characteristics of quadratics"}, {"day": 9, "codes": ["LFV", "4J7"], "note": "Function tables + domain/range for quadratics"}, {"day": 10, "codes": ["W2Q", "YGV", "VHB"], "note": "Vertex form practice + word problem interpretation"}, {"day": 11, "codes": ["D6H"], "note": "Evaluate exponential functions; spirals exponent rules"}, {"day": 12, "codes": ["UKG", "QSF"], "note": "Exponential growth/decay and compound interest contexts"}, {"day": 13, "codes": ["ZQA", "XPC"], "note": "Graph and analyze exponentials + geometric sequences"}, {"day": 14, "codes": ["DHB", "YVN"], "note": "Identify function types + compare functions (mixed spiral)"}, {"day": 15, "codes": ["TSA", "MHC"], "note": "DSR coverage before summative (lowest-priority domain)"}], "mnBaseUrl": "https://www.mathnation.com", "mnDomains": [{"domain": "Numerical Reasoning", "gaCode": "A.NR.5",  "tier": "Tier 1 Critical", "cohortPctBelow": "89%", "subs": [{"code": "A.NR.5.1", "desc": "Rewrite expressions involving radicals", "lessons": "MN+ Algebra 2: Unit 2 L4, L6", "gap": "Not in MN+ Algebra 1. Radical simplification lives in the Algebra 2 product. Supplement with the Radicals anchor chart for this cohort."}, {"code": "A.NR.5.2", "desc": "Sum/product of rational and irrational numbers", "lessons": "MN+ Algebra 1: Unit 1 L10", "gap": null}]}, {"domain": "PAR: Quadratic Expressions & Equations", "gaCode": "A.PAR.6",  "tier": "Tier 1 Critical", "cohortPctBelow": "89%", "subs": [{"code": "A.PAR.6.1", "desc": "Interpret quadratic expressions in context", "lessons": "MN+ Algebra 1: Unit 8 L1, L2; Unit 9 L1, L2, L3", "gap": null}, {"code": "A.PAR.6.2", "desc": "Produce equivalent forms of a quadratic expression", "lessons": "MN+ Algebra 1: Unit 8 L6, L7, L8; Unit 9 L3, L5, L6, L7", "gap": null}, {"code": "A.PAR.6.3", "desc": "Create and solve quadratic equations", "lessons": "MN+ Algebra 1: Unit 8 L3, L4, L5; Unit 10 L5-L11", "gap": null}, {"code": "A.PAR.6.4", "desc": "Constraints; possible/not-possible data points", "lessons": "MN+ Algebra 1: Unit 9 L8, L9; Unit 10 L11", "gap": null}]}, {"domain": "FGR: Arithmetic Sequences & Linear Functions", "gaCode": "A.FGR.2",  "tier": "Tier 1 Critical", "cohortPctBelow": "89%", "subs": [{"code": "A.FGR.2.1", "desc": "Arithmetic sequences as functions", "lessons": "MN+ Algebra 1: Unit 11 L2; Unit 14 L3, L4, L5", "gap": null}, {"code": "A.FGR.2.2", "desc": "Graph and interpret a linear function", "lessons": "MN+ Algebra 1: Unit 3 L5; Unit 9 L4", "gap": null}, {"code": "A.FGR.2.3", "desc": "Domain and range of a linear function", "lessons": "MN+ Algebra 1: Unit 3 L1, L2, L3, L4", "gap": null}, {"code": "A.FGR.2.4", "desc": "Function notation for linear functions", "lessons": "MN+ Algebra 1: Unit 1 L6, L7", "gap": null}, {"code": "A.FGR.2.5", "desc": "Linear vs nonlinear (parent graphs)", "lessons": "MN+ Algebra 1: Unit 13 L6; Unit 15 L2, L4", "gap": null}]}, {"domain": "GSR: Coordinate Geometry", "gaCode": "A.GSR.3",  "tier": "Tier 2 High", "cohortPctBelow": "78%", "subs": [{"code": "A.GSR.3.1", "desc": "Slope, parallel/perpendicular lines, area, perimeter", "lessons": "MN+ Algebra 1: Unit 5 L3, L4, L5", "gap": null}, {"code": "A.GSR.3.2", "desc": "Distance formula, midpoint formula", "lessons": "MN+ Geometry: Unit 15 L14", "gap": "Distance/midpoint formula is in the MN+ Geometry product, not Algebra 1. Algebra 1 Unit 5 covers slope and parallel/perpendicular but not the distance formula directly."}]}, {"domain": "PAR: Linear Inequalities", "gaCode": "A.PAR.4",  "tier": "Tier 2 High", "cohortPctBelow": "78%", "subs": [{"code": "A.PAR.4.1", "desc": "Create/solve linear inequalities in two variables", "lessons": "MN+ Algebra 1: Unit 7 L5, L6, L7", "gap": null}, {"code": "A.PAR.4.2", "desc": "Constraints; possible/not-possible data points", "lessons": "MN+ Algebra 1: Unit 3 L1, L6", "gap": null}, {"code": "A.PAR.4.3", "desc": "Systems of linear inequalities by graphing", "lessons": "MN+ Algebra 1: Unit 7 L8, L9", "gap": null}]}, {"domain": "FGR: Exponential Functions", "gaCode": "A.FGR.9",  "tier": "Tier 2 High", "cohortPctBelow": "78%", "subs": [{"code": "A.FGR.9.1", "desc": "Function notation for exponential functions", "lessons": "MN+ Algebra 1: Unit 11 L6, L7; Unit 14 L6, L7", "gap": null}, {"code": "A.FGR.9.2", "desc": "Graph/analyze key characteristics of exponentials", "lessons": "MN+ Algebra 1: Unit 11 L1, L3, L4, L5", "gap": null}, {"code": "A.FGR.9.3", "desc": "Transformations of exponential graphs", "lessons": "MN+ Algebra 1: Unit 15 L5, L6, L7, L8", "gap": null}, {"code": "A.FGR.9.4", "desc": "Geometric sequences as functions", "lessons": "MN+ Algebra 1: Unit 11 L2, L6, L7; Unit 14 L6, L7", "gap": null}, {"code": "A.FGR.9.5", "desc": "Compare two functions in different representations", "lessons": "MN+ Algebra 1: Unit 13 L4", "gap": null}]}, {"domain": "FGR: Quadratic Functions", "gaCode": "A.FGR.7",  "tier": "Tier 3 Moderate", "cohortPctBelow": "67%", "subs": [{"code": "A.FGR.7.1", "desc": "Function notation for quadratic functions", "lessons": "MN+ Algebra 1: Unit 9 L8", "gap": null}, {"code": "A.FGR.7.3", "desc": "Graph/analyze key characteristics of quadratics", "lessons": "MN+ Algebra 1: Unit 9 L1, L2, L4", "gap": null}, {"code": "A.FGR.7.5", "desc": "Reveal max/min of a quadratic in context", "lessons": "MN+ Algebra 1: Unit 9 L3-L8", "gap": null}, {"code": "A.FGR.7.6", "desc": "Create quadratic functions in two variables", "lessons": "MN+ Algebra 1: Unit 10 L1, L2, L3, L4", "gap": null}, {"code": "A.FGR.7.8", "desc": "Equivalent forms of a quadratic function", "lessons": "MN+ Algebra 1: Unit 9 L3, L7; Unit 10 L1-L4", "gap": null}]}, {"domain": "PAR: Exponential Expressions & Equations", "gaCode": "A.PAR.8",  "tier": "Tier 3 Moderate", "cohortPctBelow": "56%", "subs": [{"code": "A.PAR.8.1", "desc": "Interpret exponential expressions in context", "lessons": "MN+ Algebra 1: Unit 11 L3; Unit 14 L5, L8", "gap": null}, {"code": "A.PAR.8.2", "desc": "Create exponential equations in one variable", "lessons": "MN+ Algebra 1: Unit 11 L6, L7", "gap": null}, {"code": "A.PAR.8.3", "desc": "Exponential equations in two variables; graph", "lessons": "MN+ Algebra 1: Unit 11 L4, L5, L6, L7", "gap": null}, {"code": "A.PAR.8.4", "desc": "Constraints by exponential equations", "lessons": "MN+ Algebra 1: Unit 11 L3", "gap": null}]}, {"domain": "Data & Statistical Reasoning", "gaCode": "A.DSR.10",  "tier": "Tier 3 Moderate", "cohortPctBelow": "56%", "subs": [{"code": "A.DSR.10.1", "desc": "Center and variability of distributions", "lessons": "MN+ Algebra 1: Unit 12 L3, L4, L5", "gap": null}, {"code": "A.DSR.10.2", "desc": "Interpret shape/center/variability; outliers", "lessons": "MN+ Algebra 1: Unit 12 L1, L2, L3, L4, L6", "gap": null}, {"code": "A.DSR.10.3", "desc": "Scatter plots; describe variable relationships", "lessons": "MN+ Algebra 1: Unit 4 L1, L2, L3", "gap": null}, {"code": "A.DSR.10.6", "desc": "Decide which function type best models data", "lessons": "MN+ Algebra 1: Unit 13 L3", "gap": null}]}], "mnDaily": [{"day": 1, "lessons": "U1 L10", "note": "Rational vs irrational classification (A.NR.5.2)"}, {"day": 2, "lessons": "Alg 2 U2 L4, L6", "note": "Radical simplification is Algebra 2 only. Use the anchor chart if no Alg 2 access."}, {"day": 3, "lessons": "U3 L1-L5; U5 L3-L5", "note": "Linear key features + slope/parallel/perpendicular"}, {"day": 4, "lessons": "U14 L3, L4, L5", "note": "Arithmetic sequences and sequences as linear functions"}, {"day": 5, "lessons": "U7 L5, L6, L7", "note": "One- to two-variable linear inequalities (before checkpoint)"}, {"day": 6, "lessons": "U8 L1, L2", "note": "Factoring with distributive property; trinomials with tiles"}, {"day": 7, "lessons": "U8 L3, L4, L5; U10 L7", "note": "Factoring trinomials + solving quadratics by factoring"}, {"day": 8, "lessons": "U9 L1, L2", "note": "Key features of quadratic functions"}, {"day": 9, "lessons": "U9 L3, L4, L5", "note": "Rewriting quadratics; graphing from key features"}, {"day": 10, "lessons": "U9 L3; U10 L1-L4", "note": "Equivalent forms + writing quadratics (before checkpoint)"}, {"day": 11, "lessons": "U11 L1, L3", "note": "Exponential growth vs decay; key features"}, {"day": 12, "lessons": "U11 L6, L7", "note": "Writing exponential functions from graph/table/description"}, {"day": 13, "lessons": "U11 L4, L5", "note": "Graphing exponential functions"}, {"day": 14, "lessons": "U13 L3, L4", "note": "Which function type best models data; comparing functions"}, {"day": 15, "lessons": "U12 L3; U4 L1", "note": "Light DSR review before summative (lowest-priority domain)"}]};
+
+document.querySelectorAll('nav.tabs button').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('nav.tabs button').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    document.getElementById(b.dataset.tab).classList.add('active');
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  });
+});
+
+const t = DATA.totals;
+const cohortPct = Math.round(t.cohortN/t.tested*100);
+const tiles = [
+  {label:'Total Tested', value:t.tested, sub:'unique students', cls:'navy'},
+  {label:'Remediation Cohort', value:t.cohortN, sub:'students at GCS \u2264 69', cls:''},
+  {label:'% in Remediation', value:cohortPct+'%', sub:'of tested students', cls:''},
+  {label:'Beginning Learners', value:t.beginning, sub:'ALD Level 1', cls:''},
+  {label:'Developing Learners', value:t.developing, sub:'ALD Level 2', cls:'app'},
+  {label:'Proficient+', value:t.proficient+t.distinguished, sub:'ALD 3-4 combined', cls:'met'},
+  {label:'Lowest GCS', value:Math.min(...DATA.cohort.map(s=>s.gcs)), sub:'cohort floor', cls:''},
+  {label:'Highest GCS in Cohort', value:Math.max(...DATA.cohort.map(s=>s.gcs)), sub:'cohort ceiling', cls:'app'},
+];
+document.getElementById('tilesGrid').innerHTML = tiles.map(t =>
+  `<div class="tile ${t.cls}"><div class="label">${t.label}</div><div class="value">${t.value}</div><div class="sub">${t.sub}</div></div>`
+).join('');
+
+const findings = [
+  '100% of the cohort scored Below Target on both umbrella domains (Patterning &amp; Algebraic Reasoning <em>and</em> Functional &amp; Graphical Reasoning). These two umbrella domains alone account for the majority of the Milestones blueprint.',
+  'Numerical Reasoning is the foundational weakness: 89% of the cohort scored Below Target. Without rational/irrational reasoning, students cannot handle radical solutions to quadratics.',
+  'Quadratic Expressions/Equations (89% Below) and Quadratic Functions (67% Below) are the largest single content block in the blueprint. Week 2 of the plan lands here.',
+  'Linear Functions and Arithmetic Sequences (89% Below) must precede quadratic work. Slope and rate of change are the gateway to vertex form analysis.',
+  'Coordinate Geometry (78% Below) overlaps with linear function instruction. Embed distance, midpoint, and slope into Week 1 linear lessons rather than teaching as a separate unit.'
+];
+document.getElementById('findings').innerHTML = findings.map((f,i) =>
+  `<div class="finding"><div class="num">${String(i+1).padStart(2,'0')}</div><div class="text">${f}</div></div>`
+).join('');
+
+function cohortTable(filter='all') {
+  let html = '<thead><tr><th class="center">Group</th><th>Student</th><th class="center">GCS</th><th class="center">Level</th>';
+  DATA.domains.forEach(d => html += `<th class="center" title="${d.std}">${d.name}</th>`);
+  html += '</tr></thead><tbody>';
+  DATA.cohort.forEach(s => {
+    html += `<tr><td class="center"><span class="group-pill ${s.group}">${s.group}</span></td>`;
+    html += `<td class="student-name">${s.name}</td>`;
+    html += `<td class="center"><span class="gcs-pill">${s.gcs}</span></td>`;
+    html += `<td class="center" style="font-size:11px;">${s.level}</td>`;
+    DATA.domains.forEach(d => {
+      const v = s.domains[d.name];
+      if (!v) {
+        html += '<td class="cell-status none">\u2014</td>';
+      } else if (filter !== 'all' && v !== filter) {
+        html += `<td class="cell-status none" style="opacity:0.25;" title="${v}">${v.split(' ')[0]}</td>`;
+      } else {
+        const cls = v === 'Below Target' ? 'below' : v === 'Approaching Target' ? 'app' : 'met';
+        html += `<td class="cell-status ${cls}" title="${v}">${v.split(' ')[0]}</td>`;
+      }
+    });
+    html += '</tr>';
+  });
+  html += '<tr style="background:var(--rule-soft); font-weight:600;">';
+  html += '<td></td><td>Cohort Below Target</td><td></td><td></td>';
+  DATA.domains.forEach(d => {
+    const below = DATA.cohort.filter(s => s.domains[d.name] === 'Below Target').length;
+    const pct = Math.round(below/DATA.cohort.length*100);
+    html += `<td class="center" style="font-family: \u0027JetBrains Mono\u0027, monospace; font-size:11px;">${below}/${DATA.cohort.length}<br><span style="color:var(--below); font-size:10px;">${pct}%</span></td>`;
+  });
+  html += '</tr></tbody>';
+  document.getElementById('cohortTable').innerHTML = html;
+}
+cohortTable();
+document.getElementById('cohortFilter').addEventListener('change', e => cohortTable(e.target.value));
+
+function renderBars(stats, container) {
+  let html = '';
+  stats.forEach(s => {
+    const total = s.n || 1;
+    const bp = (s.below/total)*100, ap = (s.app/total)*100, mp = (s.met/total)*100;
+    html += `<div class="bar-row">
+      <div class="name">${s.name}<span class="std">${s.std}</span></div>
+      <div class="bar">
+        ${s.below>0 ? `<div class="seg-below" style="width:${bp}%">${s.below}</div>` : ''}
+        ${s.app>0 ? `<div class="seg-app" style="width:${ap}%">${s.app}</div>` : ''}
+        ${s.met>0 ? `<div class="seg-met" style="width:${mp}%">${s.met}</div>` : ''}
+      </div>
+      <div class="pct">${Math.round(bp)}% below</div>
+    </div>`;
+  });
+  document.getElementById(container).innerHTML = html;
+}
+renderBars(DATA.groupStats, 'groupBars');
+renderBars(DATA.cohortStatsSorted, 'cohortBars');
+
+function cohortDomainTable() {
+  let html = '<thead><tr><th class="center">Rank</th><th>Domain</th><th class="center">Standard</th><th class="center">Below</th><th class="center">Appr.</th><th class="center">Met</th><th class="center">% Below</th><th class="center">Index</th><th class="center">Tier</th></tr></thead><tbody>';
+  DATA.cohortStatsSorted.forEach((s, i) => {
+    let tier, tierCls;
+    if (s.avg <= 1.15) { tier = 'Tier 1 Critical'; tierCls = 't1'; }
+    else if (s.avg <= 1.30) { tier = 'Tier 2 High'; tierCls = 't2'; }
+    else { tier = 'Tier 3 Moderate'; tierCls = 't3'; }
+    const pct = Math.round(s.below/s.n*100);
+    html += `<tr>
+      <td class="center" style="font-family:\u0027Fraunces\u0027,serif; font-weight:700; font-size:16px; color:var(--accent);">${i+1}</td>
+      <td class="student-name">${s.name}</td>
+      <td class="center" style="font-family: \u0027JetBrains Mono\u0027, monospace; font-size:11px;">${s.std}</td>
+      <td class="center">${s.below}</td>
+      <td class="center">${s.app}</td>
+      <td class="center">${s.met}</td>
+      <td class="center" style="font-family: \u0027JetBrains Mono\u0027, monospace; font-weight:600; color:var(--below);">${pct}%</td>
+      <td class="center" style="font-family: \u0027JetBrains Mono\u0027, monospace;">${s.avg.toFixed(2)}</td>
+      <td class="center"><span class="tier ${tierCls}">${tier}</span></td>
+    </tr>`;
+  });
+  html += '</tbody>';
+  document.getElementById('cohortDomainTable').innerHTML = html;
+}
+cohortDomainTable();
+
+function renderGroups() {
+  let html = '';
+  ['A','B','C'].forEach(gk => {
+    const gm = DATA.groupMeta[gk];
+    const students = DATA.cohort.filter(s => s.group === gk);
+    html += `<div class="group-card ${gk}">
+      <div class="header">
+        <div>
+          <div class="label">Group ${gk}</div>
+          <div class="title">${gm.name.replace(/^Group [ABC]: /, '')}</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="label">${students.length} students</div>
+          <div style="font-family: \u0027JetBrains Mono\u0027, monospace; font-size:11px; margin-top:4px;">GCS ${Math.min(...students.map(s=>s.gcs))}-${Math.max(...students.map(s=>s.gcs))}</div>
+        </div>
+      </div>
+      <div class="roster table-wrap" style="border:none; margin:0;">
+        <table>
+          <thead><tr>
+            <th>Student</th><th class="center">GCS</th><th class="center">Scale</th>
+            <th>Achievement Level</th>
+            <th class="center">Below</th><th class="center">Approach</th><th class="center">Met</th>
+          </tr></thead>
+          <tbody>`;
+    students.forEach(s => {
+      html += `<tr>
+        <td class="student-name">${s.name}</td>
+        <td class="center"><span class="gcs-pill">${s.gcs}</span></td>
+        <td class="center" style="font-family: \u0027JetBrains Mono\u0027, monospace;">${s.scale}</td>
+        <td style="font-size:11.5px;">${s.level}</td>
+        <td class="center" style="background:var(--below-soft); color:var(--below); font-weight:600;">${s.below}</td>
+        <td class="center" style="background:var(--app-soft); color:#8a5d20; font-weight:600;">${s.app}</td>
+        <td class="center" style="background:var(--met-soft); color:var(--met); font-weight:600;">${s.met}</td>
+      </tr>`;
+    });
+    html += `</tbody></table></div>
+      <dl class="group-notes">
+        <dt>Profile</dt><dd>${gm.profile}</dd>
+        <dt>Scaffolding</dt><dd>${gm.scaffolding}</dd>
+        <dt>Pace</dt><dd>${gm.pace}</dd>
+        <dt>Task design</dt><dd>${gm.task}</dd>
+        <dt>Formative check</dt><dd>${gm.check}</dd>
+      </dl>
+    </div>`;
+  });
+  document.getElementById('groupCards').innerHTML = html;
+}
+renderGroups();
+
+function renderRotation() {
+  let html = '';
+  DATA.rotation.forEach(r => {
+    if (r.whole) {
+      html += `<tr><td class="time">${r.time}</td><td colspan="3" class="whole">${r.whole}</td></tr>`;
+    } else {
+      html += `<tr><td class="time">${r.time}</td><td class="colA">${r.a}</td><td class="colB">${r.b}</td><td class="colC">${r.c}</td></tr>`;
+    }
+  });
+  document.getElementById('rotationBody').innerHTML = html;
+}
+renderRotation();
+
+function renderPlan() {
+  let html = '';
+  DATA.plan.forEach((w, i) => {
+    html += `<div class="week">
+      <div class="week-head">
+        <div><div class="label">Week</div><div class="num">${String(i+1).padStart(2,'0')}</div></div>
+        <div><div class="label">Theme</div><div class="theme">${w.theme}</div></div>
+      </div>
+      <div class="rationale"><b>Why this week:</b> ${w.rationale}</div>
+      <div class="days">`;
+    w.days.forEach(d => {
+      html += `<div class="day">
+        <div class="daylabel"><div class="d">${d.day}</div><div class="std">${d.std}</div></div>
+        <div class="target">${d.target}</div>
+        <div class="meta-block"><span class="key">Tasks</span>${d.tasks}</div>
+        <div class="meta-block"><span class="key">DOK Mix</span>${d.dok}</div>
+        <div class="meta-block"><span class="key">Formative</span>${d.check}</div>
+        ${d.link ? `<div class="day-link"><a href="${d.link.url}" target="_blank" rel="noopener" class="open-link">${d.link.label}</a></div>` : ''}
+      </div>`;
+    });
+    html += '</div></div>';
+  });
+  document.getElementById('planWeeks').innerHTML = html;
+}
+renderPlan();
+
+
+function renderLinkedMaterials() {
+  if (!DATA.linkedMaterials || !DATA.linkedMaterials.length) {
+    document.getElementById('linkedMaterialsWrap').innerHTML = '<div style="padding: 16px; color: var(--ink-soft); font-style: italic; font-size: 13px;">No materials linked yet.</div>';
+    return;
+  }
+  let html = '<table class="materials-table"><thead><tr><th>Type</th><th>Material</th><th>Description</th><th class="center">Week</th><th class="center">Day</th><th class="center">Action</th></tr></thead><tbody>';
+  DATA.linkedMaterials.forEach(m => {
+    html += '<tr>'
+      + '<td><span class="type-pill">' + (m.type || 'Resource') + '</span></td>'
+      + '<td class="student-name">' + m.title + '</td>'
+      + '<td style="font-size:12px; color:var(--ink-soft);">' + m.description + '</td>'
+      + '<td class="center" style="font-family: \u0027JetBrains Mono\u0027, monospace; font-weight:600;">' + m.week + '</td>'
+      + '<td class="center" style="font-family: \u0027JetBrains Mono\u0027, monospace;">' + m.day + '</td>'
+      + '<td class="center"><a href="' + m.url + '" target="_blank" rel="noopener" class="open-link">Open</a></td>'
+      + '</tr>';
+  });
+  html += '</tbody></table>';
+  document.getElementById('linkedMaterialsWrap').innerHTML = html;
+}
+renderLinkedMaterials();
+
+
+function renderIxlDomains() {
+  let html = '';
+  DATA.ixlDomains.forEach(dom => {
+    const tier = dom.tier.includes('Tier 1') ? 't1' : dom.tier.includes('Tier 2') ? 't2' : 't3';
+    html += `<div class="ixl-domain ${tier}">
+      <div class="ixl-domain-head">
+        <div class="domain-name">${dom.domain}</div>
+        <div class="std-tag">${dom.standard}</div>
+        <div class="tier-badge">${dom.tier}</div>
+        <div class="pct-tag">${dom.cohortPctBelow} Below</div>
+      </div>
+      <div class="desc">${dom.description}</div>
+      <div class="skills-list">`;
+    dom.skills.forEach(sk => {
+      html += `<div class="ixl-skill-row ${sk.critical ? 'critical' : ''}">
+        <div class="arrow">${sk.critical ? '\u2192' : ''}</div>
+        <div class="name">${sk.name}</div>
+        <div class="code">${sk.code}</div>
+        <div class="priority-pill ${sk.critical ? 'start' : 'support'}">${sk.critical ? 'Start Here' : 'Supporting'}</div>
+      </div>`;
+    });
+    html += '</div></div>';
+  });
+  document.getElementById('ixlDomains').innerHTML = html;
+}
+renderIxlDomains();
+
+function renderIxlDaily() {
+  // Build lookup
+  const codeToName = {};
+  DATA.ixlDomains.forEach(d => d.skills.forEach(s => codeToName[s.code] = s.name));
+
+  let html = '<thead><tr><th class="center">Day</th><th class="center">Week</th><th>Codes</th><th>Skills</th><th>Rationale</th></tr></thead><tbody>';
+  DATA.ixlDaily.forEach(d => {
+    const week = d.day <= 5 ? 1 : d.day <= 10 ? 2 : 3;
+    const codeChips = d.codes.map(c => '<span>' + c + '</span>').join('');
+    const names = d.codes.map(c => codeToName[c] || c).join('; ');
+    html += '<tr>'
+      + '<td class="center" style="font-weight: 600;">' + d.day + '</td>'
+      + '<td class="center" style="font-family: \u0027JetBrains Mono\u0027, monospace; font-size: 11px;">' + week + '</td>'
+      + '<td class="ixl-day-codes">' + codeChips + '</td>'
+      + '<td style="font-size: 12px; color: var(--ink-soft);">' + names + '</td>'
+      + '<td style="font-size: 12px;">' + d.note + '</td>'
+      + '</tr>';
+  });
+  html += '</tbody>';
+  document.getElementById('ixlDailyTable').innerHTML = html;
+}
+renderIxlDaily();
+
+
+function renderMnDomains() {
+  let out = '';
+  DATA.mnDomains.forEach(dom => {
+    const tier = dom.tier.includes('Tier 1') ? 't1' : dom.tier.includes('Tier 2') ? 't2' : 't3';
+    out += `<div class="mn-domain ${tier}">
+      <div class="mn-domain-head">
+        <div class="domain-name">${dom.domain}</div>
+        <div class="ga-tag">${dom.gaCode}</div>
+        <div class="tier-badge">${dom.tier}</div>
+        <div class="pct-tag">${dom.cohortPctBelow} Below</div>
+      </div>`;
+    dom.subs.forEach(sub => {
+      out += `<div class="mn-sub-row">
+        <div class="sub-code">${sub.code}</div>
+        <div class="sub-desc">${sub.desc}</div>
+        <div class="sub-lessons">${sub.lessons}</div>
+      </div>`;
+      if (sub.gap) {
+        out += `<div class="mn-gap">\u26A0 ${sub.gap}</div>`;
+      }
+    });
+    out += '</div>';
+  });
+  document.getElementById('mnDomains').innerHTML = out;
+}
+renderMnDomains();
+
+function renderMnDaily() {
+  let out = '<thead><tr><th class="center">Day</th><th class="center">Week</th><th>MN+ Alg 1 Lessons</th><th>Use it for</th></tr></thead><tbody>';
+  DATA.mnDaily.forEach(d => {
+    const week = d.day <= 5 ? 1 : d.day <= 10 ? 2 : 3;
+    out += '<tr>'
+      + '<td class="center" style="font-weight:600;">' + d.day + '</td>'
+      + '<td class="center" style="font-family:\u0027JetBrains Mono\u0027,monospace; font-size:11px;">' + week + '</td>'
+      + '<td class="mn-day-lessons">' + d.lessons + '</td>'
+      + '<td style="font-size:12px;">' + d.note + '</td>'
+      + '</tr>';
+  });
+  out += '</tbody>';
+  document.getElementById('mnDailyTable').innerHTML = out;
+}
+renderMnDaily();
+
+function renderProfiles() {
+  let html = '';
+  DATA.cohort.forEach(s => {
+    const rank = {'Below Target':1, 'Approaching Target':2, 'Met Target':3};
+    const sorted = DATA.domains.map(d => ({...d, v: s.domains[d.name]}))
+      .filter(d => d.v)
+      .sort((a,b) => rank[a.v] - rank[b.v]);
+    html += `<div class="profile">
+      <div class="profile-head">
+        <div class="name"><span class="group-pill ${s.group}">${s.group}</span>${s.name}</div>
+        <div class="stats">
+          <div><span class="l">GCS</span><span class="v">${s.gcs}</span></div>
+          <div><span class="l">Scale</span><span class="v">${s.scale}</span></div>
+          <div><span class="l">Level</span><span class="v" style="font-family: \u0027Fraunces\u0027, serif; font-size:13px;">${s.level}</span></div>
+        </div>
+      </div>
+      <div class="profile-body table-wrap" style="border:none; margin:0;">
+        <table>
+          <thead><tr><th>Domain</th><th class="center">Standard</th><th class="center">Status</th><th class="center">Priority</th></tr></thead>
+          <tbody>`;
+    sorted.forEach(d => {
+      const cls = d.v === 'Below Target' ? 'below' : d.v === 'Approaching Target' ? 'app' : 'met';
+      const pri = d.v === 'Below Target' ? 'High' : d.v === 'Approaching Target' ? 'Medium' : 'Maintain';
+      html += `<tr><td>${d.name}</td><td class="center" style="font-family: \u0027JetBrains Mono\u0027, monospace; font-size:10.5px;">${d.std}</td><td><span class="cell-status ${cls}" style="display:block;">${d.v}</span></td><td class="center">${pri}</td></tr>`;
+    });
+    html += '</tbody></table></div></div>';
+  });
+  document.getElementById('profileCards').innerHTML = html;
+}
+renderProfiles();
+</script>
+</body>
+</html>
